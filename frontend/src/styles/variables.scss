@@ -1,0 +1,56 @@
+// SCSS 变量定义
+
+// 颜色系统
+$primary-gradient-start: #667eea;
+$primary-gradient-end: #764ba2;
+$success-color: #28a745;
+$warning-color: #ffc107;
+$error-color: #dc3545;
+$info-color: #17a2b8;
+
+// 文字颜色
+$text-primary: #333;
+$text-secondary: #666;
+$text-light: #999;
+$text-white: #fff;
+
+// 背景色
+$bg-white: #fff;
+$bg-light: #f8f9fa;
+$bg-glass: rgba(255, 255, 255, 0.95);
+
+// 主色调（别名）
+$color-primary: $primary-gradient-start;
+
+// 间距
+$spacing-xs: 5px;
+$spacing-sm: 10px;
+$spacing-md: 15px;
+$spacing-lg: 20px;
+$spacing-xl: 25px;
+
+// 圆角
+$border-radius-sm: 10px;
+$border-radius-md: 15px;
+$border-radius-lg: 20px;
+
+// 字体大小
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+
+// 阴影
+$box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$box-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+// 别名（兼容旧代码）
+$shadow-sm: $box-shadow-sm;
+$shadow-md: $box-shadow-md;
+$shadow-lg: $box-shadow-lg;
+
+// 过渡
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;

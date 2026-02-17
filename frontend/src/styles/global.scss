@@ -1,0 +1,156 @@
+@use './variables.scss' as *;
+@use 'sass:color';
+
+// 全局样式重置
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+// 卡片样式
+.card {
+  background: $bg-glass;
+  backdrop-filter: blur(10px);
+  border-radius: $border-radius-md;
+  padding: $spacing-lg;
+  box-shadow: $box-shadow-md;
+  margin-bottom: $spacing-md;
+}
+
+// 按钮样式
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: $border-radius-sm;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-normal;
+  text-align: center;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+  color: $text-white;
+  box-shadow: $box-shadow-sm;
+
+  &:hover:not(:disabled) {
+    box-shadow: $box-shadow-md;
+  }
+}
+
+.btn-secondary {
+  background: $bg-white;
+  color: $text-primary;
+  border: 1px solid #ddd;
+
+  &:hover:not(:disabled) {
+    background: $bg-light;
+  }
+}
+
+.btn-delete {
+  background: $error-color;
+  color: $text-white;
+
+  &:hover:not(:disabled) {
+    background: color.scale($error-color, $lightness: -10%);
+  }
+}
+
+// 工具类
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: $text-primary;
+}
+
+.text-secondary {
+  color: $text-secondary;
+}
+
+.mt-sm {
+  margin-top: $spacing-sm;
+}
+
+.mt-md {
+  margin-top: $spacing-md;
+}
+
+.mt-lg {
+  margin-top: $spacing-lg;
+}
+
+.mb-sm {
+  margin-bottom: $spacing-sm;
+}
+
+.mb-md {
+  margin-bottom: $spacing-md;
+}
+
+.mb-lg {
+  margin-bottom: $spacing-lg;
+}
+
+// 移动端优化
+@media (max-width: 480px) {
+  .card {
+    padding: $spacing-md;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}

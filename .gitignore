@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# 数据文件
+data/
+*.json
+
+# 打包文件
+build/
+dist/
+*.spec
+*.exe
+deploy/
+
+# 进程 ID 文件
+*.pid
+
+# 日志文件
+logs/
+*.log
+
+# 可执行文件
+train
+web_app
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 环境变量文件
+.env
+
+# 问题输入配置文件
+question_input
+question_input_linux
+
+# 测试问题目录
+questions2/

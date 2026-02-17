@@ -1,0 +1,1537 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
+  "elements": [
+    {
+      "id": "markdown-files",
+      "type": "rectangle",
+      "x": 100,
+      "y": 50,
+      "width": 180,
+      "height": 70,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "#fff4e6",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1001,
+      "version": 2,
+      "versionNonce": 1305056122,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "markdown-files-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-md-to-parser"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "a0"
+    },
+    {
+      "id": "markdown-files-text",
+      "type": "text",
+      "x": 133.11202239990234,
+      "y": 65,
+      "width": 113.77595520019531,
+      "height": 40,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1002,
+      "version": 5,
+      "versionNonce": 165795238,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239794880,
+      "link": null,
+      "locked": false,
+      "text": "Markdown 文件\n(*.md 问题库)",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "markdown-files",
+      "originalText": "Markdown 文件\n(*.md 问题库)",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "a1",
+      "roundness": null
+    },
+    {
+      "id": "config-file",
+      "type": "rectangle",
+      "x": 340,
+      "y": 50,
+      "width": 180,
+      "height": 70,
+      "angle": 0,
+      "strokeColor": "#343a40",
+      "backgroundColor": "#ced4da",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1003,
+      "version": 2,
+      "versionNonce": 1425871930,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "config-file-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-config-to-parser"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "a2"
+    },
+    {
+      "id": "config-file-text",
+      "type": "text",
+      "x": 372.6560516357422,
+      "y": 65,
+      "width": 114.68789672851562,
+      "height": 40,
+      "angle": 0,
+      "strokeColor": "#343a40",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1004,
+      "version": 5,
+      "versionNonce": 1132852582,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239791583,
+      "link": null,
+      "locked": false,
+      "text": "配置文件\nquestion_input",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "config-file",
+      "originalText": "配置文件\nquestion_input",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "a3",
+      "roundness": null
+    },
+    {
+      "id": "parser",
+      "type": "rectangle",
+      "x": 220,
+      "y": 200,
+      "width": 180,
+      "height": 80,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "#e7f5ff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1005,
+      "version": 2,
+      "versionNonce": 1401060602,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "parser-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-md-to-parser"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-config-to-parser"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-parser-to-algo"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "a4"
+    },
+    {
+      "id": "parser-text",
+      "type": "text",
+      "x": 241.8080291748047,
+      "y": 210,
+      "width": 136.38394165039062,
+      "height": 60,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1006,
+      "version": 4,
+      "versionNonce": 168841786,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239847434,
+      "link": null,
+      "locked": false,
+      "text": "问题解析器\nparser.py\n(解析 # q 和 # a)",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "parser",
+      "originalText": "问题解析器\nparser.py\n(解析 # q 和 # a)",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "a5",
+      "roundness": null
+    },
+    {
+      "id": "algorithm",
+      "type": "rectangle",
+      "x": 220,
+      "y": 350,
+      "width": 180,
+      "height": 100,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "#339af0",
+      "fillStyle": "solid",
+      "strokeWidth": 3,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1007,
+      "version": 2,
+      "versionNonce": 1457311162,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "algorithm-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-parser-to-algo"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-algo-to-cli"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-algo-to-web"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-algo-to-data"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-data-to-algo"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "a6"
+    },
+    {
+      "id": "algorithm-text",
+      "type": "text",
+      "x": 229.71207427978516,
+      "y": 360,
+      "width": 160.5758514404297,
+      "height": 80,
+      "angle": 0,
+      "strokeColor": "#ffffff",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1008,
+      "version": 3,
+      "versionNonce": 1439543142,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239800594,
+      "link": null,
+      "locked": false,
+      "text": "间隔重复算法\nspaced_repetition.py\n(Ebbinghaus 曲线)\n4级记忆系统",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "algorithm",
+      "originalText": "间隔重复算法\nspaced_repetition.py\n(Ebbinghaus 曲线)\n4级记忆系统",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "a7",
+      "roundness": null
+    },
+    {
+      "id": "cli",
+      "type": "rectangle",
+      "x": 50,
+      "y": 530,
+      "width": 150,
+      "height": 90,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "#ebfbee",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1009,
+      "version": 2,
+      "versionNonce": 1143932538,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "cli-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-algo-to-cli"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-cli-to-algo"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "a8"
+    },
+    {
+      "id": "cli-text",
+      "type": "text",
+      "x": 78.2560043334961,
+      "y": 545,
+      "width": 93.48799133300781,
+      "height": 60,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1010,
+      "version": 3,
+      "versionNonce": 608048378,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239804426,
+      "link": null,
+      "locked": false,
+      "text": "CLI 界面\ntrain.py\n(命令行训练)",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "cli",
+      "originalText": "CLI 界面\ntrain.py\n(命令行训练)",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "a9",
+      "roundness": null
+    },
+    {
+      "id": "web",
+      "type": "rectangle",
+      "x": 420,
+      "y": 530,
+      "width": 150,
+      "height": 90,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "#ebfbee",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1011,
+      "version": 2,
+      "versionNonce": 1681663802,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "web-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-algo-to-web"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-web-to-algo"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "aA"
+    },
+    {
+      "id": "web-text",
+      "type": "text",
+      "x": 430,
+      "y": 545,
+      "width": 130,
+      "height": 60,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1012,
+      "version": 2,
+      "versionNonce": 711491942,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "Web 界面\nweb_app.py\n(Flask API)",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "web",
+      "originalText": "Web 界面\nweb_app.py\n(Flask API)",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aB",
+      "roundness": null
+    },
+    {
+      "id": "data",
+      "type": "rectangle",
+      "x": 220,
+      "y": 530,
+      "width": 180,
+      "height": 90,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "#fff4e6",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1013,
+      "version": 2,
+      "versionNonce": 1869033466,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "data-text"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-algo-to-data"
+        },
+        {
+          "type": "arrow",
+          "id": "arrow-data-to-algo"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "index": "aC"
+    },
+    {
+      "id": "data-text",
+      "type": "text",
+      "x": 239.18407440185547,
+      "y": 545,
+      "width": 141.63185119628906,
+      "height": 60,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1014,
+      "version": 3,
+      "versionNonce": 1115602746,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239807002,
+      "link": null,
+      "locked": false,
+      "text": "数据存储\nlearning_data.json\n(学习进度)",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "data",
+      "originalText": "数据存储\nlearning_data.json\n(学习进度)",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aD",
+      "roundness": null
+    },
+    {
+      "id": "arrow-md-to-parser",
+      "type": "arrow",
+      "x": 190,
+      "y": 120,
+      "width": 0,
+      "height": 70,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1015,
+      "version": 2,
+      "versionNonce": 431169722,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-md-to-parser-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "markdown-files",
+        "fixedPoint": [
+          0.5,
+          1
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "parser",
+        "fixedPoint": [
+          0.25,
+          0
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          70
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aE"
+    },
+    {
+      "id": "arrow-md-to-parser-text",
+      "type": "text",
+      "x": 200,
+      "y": 145,
+      "width": 80,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1016,
+      "version": 2,
+      "versionNonce": 1729617894,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "读取",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-md-to-parser",
+      "originalText": "读取",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aF",
+      "roundness": null
+    },
+    {
+      "id": "arrow-config-to-parser",
+      "type": "arrow",
+      "x": 430,
+      "y": 120,
+      "width": 0,
+      "height": 70,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1017,
+      "version": 2,
+      "versionNonce": 516094330,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-config-to-parser-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "config-file",
+        "fixedPoint": [
+          0.5,
+          1
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "parser",
+        "fixedPoint": [
+          0.75,
+          0
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          70
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aG"
+    },
+    {
+      "id": "arrow-config-to-parser-text",
+      "type": "text",
+      "x": 410,
+      "y": 145,
+      "width": 80,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1018,
+      "version": 2,
+      "versionNonce": 1579086630,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "配置路径",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-config-to-parser",
+      "originalText": "配置路径",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aH",
+      "roundness": null
+    },
+    {
+      "id": "arrow-parser-to-algo",
+      "type": "arrow",
+      "x": 310,
+      "y": 280,
+      "width": 0,
+      "height": 60,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1019,
+      "version": 2,
+      "versionNonce": 1306114618,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-parser-to-algo-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "parser",
+        "fixedPoint": [
+          0.5,
+          1
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          0.5,
+          0
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          60
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aI"
+    },
+    {
+      "id": "arrow-parser-to-algo-text",
+      "type": "text",
+      "x": 240,
+      "y": 300,
+      "width": 140,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#1864ab",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1020,
+      "version": 2,
+      "versionNonce": 1633787494,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "去重 & 添加问题",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-parser-to-algo",
+      "originalText": "去重 & 添加问题",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aJ",
+      "roundness": null
+    },
+    {
+      "id": "arrow-algo-to-cli",
+      "type": "arrow",
+      "x": 220,
+      "y": 410,
+      "width": 95,
+      "height": 110,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1021,
+      "version": 2,
+      "versionNonce": 366633722,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-algo-to-cli-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          0,
+          0.6
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "cli",
+        "fixedPoint": [
+          1,
+          0.3
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -95,
+          110
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aK"
+    },
+    {
+      "id": "arrow-algo-to-cli-text",
+      "type": "text",
+      "x": 130,
+      "y": 455,
+      "width": 80,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1022,
+      "version": 2,
+      "versionNonce": 363651494,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "获取到期",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-algo-to-cli",
+      "originalText": "获取到期",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aL",
+      "roundness": null
+    },
+    {
+      "id": "arrow-cli-to-algo",
+      "type": "arrow",
+      "x": 190,
+      "y": 557,
+      "width": 30,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1023,
+      "version": 2,
+      "versionNonce": 289928122,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-cli-to-algo-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "cli",
+        "fixedPoint": [
+          0.93,
+          0.3
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          0,
+          0.85
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          30,
+          0
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aM"
+    },
+    {
+      "id": "arrow-cli-to-algo-text",
+      "type": "text",
+      "x": 155,
+      "y": 537,
+      "width": 100,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1024,
+      "version": 2,
+      "versionNonce": 2116926694,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "用户反馈",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-cli-to-algo",
+      "originalText": "用户反馈",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aN",
+      "roundness": null
+    },
+    {
+      "id": "arrow-algo-to-web",
+      "type": "arrow",
+      "x": 400,
+      "y": 410,
+      "width": 95,
+      "height": 110,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1025,
+      "version": 2,
+      "versionNonce": 306539642,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-algo-to-web-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          1,
+          0.6
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "web",
+        "fixedPoint": [
+          0,
+          0.3
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          95,
+          110
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aO"
+    },
+    {
+      "id": "arrow-algo-to-web-text",
+      "type": "text",
+      "x": 410,
+      "y": 455,
+      "width": 80,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1026,
+      "version": 2,
+      "versionNonce": 812724262,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "获取到期",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-algo-to-web",
+      "originalText": "获取到期",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aP",
+      "roundness": null
+    },
+    {
+      "id": "arrow-web-to-algo",
+      "type": "arrow",
+      "x": 420,
+      "y": 557,
+      "width": 30,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1027,
+      "version": 2,
+      "versionNonce": 781569338,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-web-to-algo-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "web",
+        "fixedPoint": [
+          0.07,
+          0.3
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          1,
+          0.85
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -30,
+          0
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aQ"
+    },
+    {
+      "id": "arrow-web-to-algo-text",
+      "type": "text",
+      "x": 365,
+      "y": 537,
+      "width": 100,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#2b8a3e",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1028,
+      "version": 2,
+      "versionNonce": 140786534,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "用户反馈",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-web-to-algo",
+      "originalText": "用户反馈",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aR",
+      "roundness": null
+    },
+    {
+      "id": "arrow-algo-to-data",
+      "type": "arrow",
+      "x": 310,
+      "y": 450,
+      "width": 0,
+      "height": 70,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1029,
+      "version": 2,
+      "versionNonce": 1268520442,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-algo-to-data-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          0.5,
+          1
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "data",
+        "fixedPoint": [
+          0.5,
+          0
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          70
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aS"
+    },
+    {
+      "id": "arrow-algo-to-data-text",
+      "type": "text",
+      "x": 260,
+      "y": 475,
+      "width": 100,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1030,
+      "version": 2,
+      "versionNonce": 1549000358,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "保存进度",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-algo-to-data",
+      "originalText": "保存进度",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aT",
+      "roundness": null
+    },
+    {
+      "id": "arrow-data-to-algo",
+      "type": "arrow",
+      "x": 340,
+      "y": 530,
+      "width": 0,
+      "height": 70,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1031,
+      "version": 2,
+      "versionNonce": 710624954,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "arrow-data-to-algo-text"
+        }
+      ],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "data",
+        "fixedPoint": [
+          0.67,
+          0
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "endBinding": {
+        "elementId": "algorithm",
+        "fixedPoint": [
+          0.67,
+          1
+        ],
+        "mode": "orbit",
+        "focus": 0
+      },
+      "startArrowhead": null,
+      "endArrowhead": "triangle",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -70
+        ]
+      ],
+      "elbowed": false,
+      "roundness": null,
+      "lastCommittedPoint": null,
+      "index": "aU"
+    },
+    {
+      "id": "arrow-data-to-algo-text",
+      "type": "text",
+      "x": 350,
+      "y": 485,
+      "width": 100,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#d9480f",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1032,
+      "version": 2,
+      "versionNonce": 820845030,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "读取数据",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "arrow-data-to-algo",
+      "originalText": "读取数据",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aV",
+      "roundness": null
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "x": 160,
+      "y": 10,
+      "width": 300,
+      "height": 28,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "seed": 1033,
+      "version": 2,
+      "versionNonce": 1937137530,
+      "isDeleted": false,
+      "groupIds": [],
+      "frameId": null,
+      "boundElements": [],
+      "updated": 1769239782920,
+      "link": null,
+      "locked": false,
+      "text": "间隔重复学习系统架构图",
+      "fontSize": 20,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "间隔重复学习系统架构图",
+      "autoResize": true,
+      "lineHeight": 1.25,
+      "index": "aW",
+      "roundness": null
+    }
+  ],
+  "appState": {
+    "gridSize": 20,
+    "gridStep": 5,
+    "gridModeEnabled": false,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}
