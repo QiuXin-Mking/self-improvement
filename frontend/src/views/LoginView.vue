@@ -1,6 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-card">
+      <h1 class="app-title">KnowLoop</h1>
       <h2 class="login-title">登录</h2>
 
       <van-form @submit="onSubmit">
@@ -104,6 +105,15 @@ const onSubmit = async () => {
   background: white;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-lg;
+
+  .app-title {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+    color: $text-primary;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
 
   .login-title {
     text-align: center;

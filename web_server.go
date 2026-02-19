@@ -3,9 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -90,6 +93,7 @@ func main() {
 		protected.POST("/update-review", updateReviewHandler)
 		protected.POST("/delete-question", deleteQuestionHandler)
 		protected.POST("/init", initDatabaseHandler)
+		protected.POST("/upload-zip", uploadZipHandler)
 	}
 
 	// Get port from environment, default to 5000
@@ -98,7 +102,7 @@ func main() {
 		port = "5000"
 	}
 
-	r.Run(":" + port)
+	r.Run("0.0.0.0:" + port)
 }
 
 func registerHandler(c *gin.Context) {
@@ -482,6 +486,93 @@ func initDatabaseHandler(c *gin.Context) {
 			"skipped":    skipped,
 			"duplicates": duplicates,
 			"stats":      stats,
+		},
+	})
+}
+
+func uploadZipHandler(c *gin.Context) {
+	userId, _ := c.Get("user_id")
+	userID := userId.(uint)
+
+	// Get file from form
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "请上传文件",
+		})
+		return
+	}
+
+	// Check file extension (only allow .zip files)
+	ext := filepath.Ext(file.Filename)
+	if ext != ".zip" {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "只支持 .zip 格式的压缩文件",
+		})
+		return
+	}
+
+	// Get upload directory from environment, default to "uploads"
+	uploadDir := os.Getenv("UPLOAD_DIR")
+	if uploadDir == "" {
+		uploadDir = "uploads"
+	}
+
+	// Create uploads directory if it doesn't exist
+	userUploadDir := filepath.Join(uploadDir, fmt.Sprintf("user_%d", userID))
+	if err := os.MkdirAll(userUploadDir, 0755); err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "无法创建上传目录",
+		})
+		return
+	}
+
+	// Generate unique filename
+	timestamp := strconv.FormatInt(int64(userID), 10) + "_" + strconv.FormatInt(time.Now().Unix(), 10)
+	uniqueFilename := timestamp + "_" + file.Filename
+	filePath := filepath.Join(userUploadDir, uniqueFilename)
+
+	// Open uploaded file
+	src, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "无法打开上传的文件",
+		})
+		return
+	}
+	defer src.Close()
+
+	// Create destination file
+	dst, err := os.Create(filePath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "无法保存文件",
+		})
+		return
+	}
+	defer dst.Close()
+
+	// Copy file content
+	if _, err := io.Copy(dst, src); err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "保存文件失败",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{
+		Success: true,
+		Message: "文件上传成功",
+		Data: map[string]interface{}{
+			"filename": uniqueFilename,
+			"path":     filePath,
+			"size":     file.Size,
 		},
 	})
 }

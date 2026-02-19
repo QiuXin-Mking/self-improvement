@@ -52,6 +52,68 @@ make run-web        # Run web server
 make init           # Initialize knowledge base
 ```
 
+### Service Management (start.sh / stop.sh)
+
+**start.sh** - 启动前端和后端服务
+
+```bash
+# 启动所有服务（前端 + 后端）
+./start.sh
+
+# 自定义端口启动
+BACKEND_PORT=8000 FRONTEND_PORT=3000 JWT_SECRET=your-secret ./start.sh
+
+# 默认端口：后端 8000，前端 3000
+```
+
+功能说明：
+- 自动检测服务是否已运行，避免重复启动
+- 后端服务使用 Go 运行，通过 `PORT` 和 `JWT_SECRET` 环境变量配置
+- 前端服务使用 Vite 运行，端口在 `frontend/vite.config.ts` 中配置
+- 日志文件保存到 `logs/` 目录，带时间戳命名
+- 自动创建日志软链接 `logs/backend.log` 和 `logs/frontend.log`，指向最新日志
+- 启动后自动检查服务状态，显示访问地址
+
+**stop.sh** - 停止所有服务
+
+```bash
+# 停止所有服务
+./stop.sh
+```
+
+功能说明：
+- 通过 PID 文件和进程查找双重方式停止服务
+- 先尝试优雅停止，1秒后强制终止残留进程
+- 同时清理 vite 和 esbuild 相关进程
+- 停止信息记录到日志文件
+
+**查看日志**
+
+```bash
+# 实时查看日志
+tail -f logs/backend.log    # 后端
+tail -f logs/frontend.log   # 前端
+
+# 查看最新 20 行
+tail -20 logs/backend.log
+tail -20 logs/frontend.log
+
+# 查看所有历史日志
+ls -lh logs/
+
+# 清理 7 天前的旧日志
+find logs/ -name '*.log' -mtime +7 -delete
+```
+
+**环境变量**
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `BACKEND_PORT` | 8000 | 后端服务端口 |
+| `FRONTEND_PORT` | 3000 | 前端服务端口 |
+| `JWT_SECRET` | my-secret-key | JWT 签名密钥 |
+| `DATABASE_PATH` | data/app.db | 数据库路径 |
+
 ## Architecture
 
 ### Core Components
