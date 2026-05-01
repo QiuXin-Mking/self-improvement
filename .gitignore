@@ -17,7 +17,10 @@ build/
 dist/
 *.spec
 *.exe
-deploy/
+
+# 部署临时文件（但保留配置文档）
+deploy-package.tar.gz
+deploy_temp/
 
 # 进程 ID 文件
 *.pid
@@ -49,3 +52,6 @@ question_input_linux
 
 # 测试问题目录
 questions2/
+
+# Git worktrees
+.worktrees/
