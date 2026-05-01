@@ -10,7 +10,6 @@ ENV/
 
 # 数据文件
 data/
-*.json
 
 # 打包文件
 build/
