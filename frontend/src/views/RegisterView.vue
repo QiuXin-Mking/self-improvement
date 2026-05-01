@@ -173,7 +173,7 @@ const onSubmit = async () => {
   }
 
   :deep(.van-cell-group--inset .van-cell) {
-    margin-bottom: 8px;
+    margin-bottom: $spacing-md;
     border-radius: $border-radius-sm;
   }
 
