@@ -167,6 +167,19 @@ const onSubmit = async () => {
       font-weight: 500;
     }
   }
+
+  :deep(.van-cell-group--inset) {
+    margin: 0;
+  }
+
+  :deep(.van-cell-group--inset .van-cell) {
+    margin-bottom: 8px;
+    border-radius: $border-radius-sm;
+  }
+
+  :deep(.van-cell-group--inset .van-cell:last-child) {
+    margin-bottom: 0;
+  }
 }
 
 .loading-overlay {
