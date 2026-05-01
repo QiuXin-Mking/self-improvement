@@ -47,17 +47,17 @@ function handleFeedback(value: 1 | 2 | 3 | 4) {
 }
 
 .feedback-label {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 500;
   margin-bottom: $spacing-md;
-  color: $text-primary;
+  color: $text-secondary;
   text-align: center;
 }
 
 .feedback-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $spacing-sm;
+  gap: 10px;
 }
 
 .btn-feedback {
@@ -65,9 +65,9 @@ function handleFeedback(value: 1 | 2 | 3 | 4) {
   flex-direction: column;
   align-items: center;
   padding: $spacing-md $spacing-sm;
-  border-radius: $border-radius-sm;
-  border: 2px solid #ddd;
-  background: $bg-white;
+  border-radius: $border-radius-md;
+  border: 1.5px solid $card-border;
+  background: $card-bg;
   cursor: pointer;
   transition: all $transition-normal;
   user-select: none;
@@ -79,65 +79,52 @@ function handleFeedback(value: 1 | 2 | 3 | 4) {
   }
 
   &.btn-feedback-1 {
-    border-color: $success-color;
-
-    &:active {
-      background: $success-color;
-      color: $text-white;
-    }
+    border-color: rgba($success, 0.4);
+    background: rgba($success, 0.05);
+    &:active { background: $success; color: $text-white; border-color: $success; }
   }
 
   &.btn-feedback-2 {
-    border-color: $warning-color;
-
-    &:active {
-      background: $warning-color;
-      color: $text-white;
-    }
+    border-color: rgba($ink-blue, 0.35);
+    background: rgba($ink-blue, 0.04);
+    &:active { background: $ink-blue; color: $text-white; border-color: $ink-blue; }
   }
 
   &.btn-feedback-3 {
-    border-color: #fd7e14;
-
-    &:active {
-      background: #fd7e14;
-      color: $text-white;
-    }
+    border-color: rgba($warning, 0.45);
+    background: rgba($warning, 0.06);
+    &:active { background: $warning; color: $text-white; border-color: $warning; }
   }
 
   &.btn-feedback-4 {
-    border-color: $error-color;
-
-    &:active {
-      background: $error-color;
-      color: $text-white;
-    }
+    border-color: rgba($danger, 0.35);
+    background: rgba($danger, 0.04);
+    &:active { background: $danger; color: $text-white; border-color: $danger; }
   }
 }
 
 .feedback-emoji {
-  font-size: 32px;
-  margin-bottom: 5px;
+  font-size: 30px;
+  margin-bottom: 4px;
 }
 
 .feedback-text {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 3px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 
 .feedback-desc {
-  font-size: 12px;
-  opacity: 0.8;
+  font-size: 11px;
+  opacity: 0.6;
 }
 
 @media (max-width: 480px) {
   .feedback-buttons {
     grid-template-columns: 1fr;
   }
-
   .feedback-emoji {
-    font-size: 28px;
+    font-size: 26px;
   }
 }
 </style>

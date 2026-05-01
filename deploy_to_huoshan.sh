@@ -89,6 +89,15 @@ if [ -f "$DEPLOY_PATH/stop.sh" ]; then
     bash "$DEPLOY_PATH/stop.sh" 2>/dev/null || true
 fi
 
+# 保留用户数据（数据库 + .env，部署时不清除）
+if [ -d "$DEPLOY_PATH/data" ]; then
+    echo "保留用户数据..."
+    cp -r "$DEPLOY_PATH/data" /tmp/spaced-repetition-data-backup
+fi
+if [ -f "$DEPLOY_PATH/.env" ]; then
+    cp "$DEPLOY_PATH/.env" /tmp/spaced-repetition-env-backup
+fi
+
 # 备份当前版本
 if [ -d "$DEPLOY_PATH" ] && [ "$(ls -A $DEPLOY_PATH 2>/dev/null)" ]; then
     echo "备份当前版本..."
@@ -111,6 +120,16 @@ rm -rf "$DEPLOY_PATH"
 mkdir -p "$DEPLOY_PATH/bin"
 mkdir -p "$DEPLOY_PATH/data"
 mkdir -p "$DEPLOY_PATH/questions"
+
+# 恢复用户数据
+if [ -d /tmp/spaced-repetition-data-backup ]; then
+    cp -r /tmp/spaced-repetition-data-backup/* "$DEPLOY_PATH/data/"
+    rm -rf /tmp/spaced-repetition-data-backup
+fi
+if [ -f /tmp/spaced-repetition-env-backup ]; then
+    cp /tmp/spaced-repetition-env-backup "$DEPLOY_PATH/.env"
+    rm -f /tmp/spaced-repetition-env-backup
+fi
 
 # 复制编译产物（不含源码）
 cp web_server "$DEPLOY_PATH/bin/web_server"

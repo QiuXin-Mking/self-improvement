@@ -33,7 +33,7 @@ import FeedbackButtons from '@/components/learning/FeedbackButtons.vue'
 const router = useRouter()
 
 const store = useLearningStore()
-const { progress, progressText, currentQuestion, isAnswerVisible, questions, currentQuestionIndex } = storeToRefs(store)
+const { progress, progressText, currentQuestion, isAnswerVisible, questions } = storeToRefs(store)
 
 function handleShowAnswer() {
   store.showAnswer()
@@ -110,7 +110,6 @@ onMounted(async () => {
   // 如果没有问题且需要初始化
   if (result && result.needsInit) {
     showToast({
-      type: 'warning',
       message: '知识库为空，请先初始化知识库',
       duration: 2000
     })

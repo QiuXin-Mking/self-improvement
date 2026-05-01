@@ -1,56 +1,88 @@
-// SCSS 变量定义
+// Warm Academic 配色系统
 
-// 颜色系统
-$primary-gradient-start: #667eea;
-$primary-gradient-end: #764ba2;
-$success-color: #28a745;
-$warning-color: #ffc107;
-$error-color: #dc3545;
-$info-color: #17a2b8;
+// 主色 — 深墨水蓝
+$ink-deep: #1a1a2e;
+$ink-blue: #2c3e6b;
+$ink-mid: #3d5a80;
 
-// 文字颜色
-$text-primary: #333;
-$text-secondary: #666;
-$text-light: #999;
-$text-white: #fff;
+// 强调色 — 暖琥珀
+$amber: #c8956c;
+$amber-light: #e8c9a0;
+$amber-glow: #f5e6d3;
 
-// 背景色
-$bg-white: #fff;
-$bg-light: #f8f9fa;
-$bg-glass: rgba(255, 255, 255, 0.95);
+// 功能色
+$success: #4a7c59;
+$warning: #d4a853;
+$danger: #b8453a;
+$info: #5b8c9e;
 
-// 主色调（别名）
-$color-primary: $primary-gradient-start;
+// 背景
+$bg-paper: #f7f4ef;
+$bg-cream: #faf8f5;
+$bg-warm-white: #fefdfb;
+
+// 文字
+$text-primary: #1a1a2e;
+$text-secondary: #6b6560;
+$text-muted: #9e9892;
+$text-white: #ffffff;
+
+// 卡片
+$card-bg: #ffffff;
+$card-border: #e8e3db;
+
+// 主色别名（兼容旧代码）
+$primary-gradient-start: $ink-blue;
+$primary-gradient-end: $ink-deep;
+$color-primary: $ink-blue;
+
+// 旧别名
+$success-color: $success;
+$warning-color: $warning;
+$error-color: $danger;
+$info-color: $info;
+$bg-white: #ffffff;
+$bg-light: $bg-paper;
+$bg-glass: rgba(255, 255, 255, 0.92);
 
 // 间距
-$spacing-xs: 5px;
-$spacing-sm: 10px;
-$spacing-md: 15px;
-$spacing-lg: 20px;
-$spacing-xl: 25px;
+$spacing-xs: 6px;
+$spacing-sm: 12px;
+$spacing-md: 18px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 40px;
 
 // 圆角
-$border-radius-sm: 10px;
-$border-radius-md: 15px;
+$border-radius-sm: 8px;
+$border-radius-md: 14px;
 $border-radius-lg: 20px;
+$border-radius-xl: 28px;
 
-// 字体大小
+// 字体
+$font-size-xs: 12px;
 $font-size-sm: 14px;
 $font-size-md: 16px;
-$font-size-lg: 18px;
-$font-size-xl: 20px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-2xl: 32px;
 
-// 阴影
-$box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-$box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-$box-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+// 阴影 — 暖色调
+$shadow-xs: 0 1px 3px rgba($ink-deep, 0.06);
+$shadow-sm: 0 2px 8px rgba($ink-deep, 0.08);
+$shadow-md: 0 4px 16px rgba($ink-deep, 0.10);
+$shadow-lg: 0 8px 32px rgba($ink-deep, 0.12);
+$shadow-card: 0 2px 12px rgba($ink-deep, 0.06), 0 1px 3px rgba($ink-deep, 0.04);
 
-// 别名（兼容旧代码）
-$shadow-sm: $box-shadow-sm;
-$shadow-md: $box-shadow-md;
-$shadow-lg: $box-shadow-lg;
+// 旧别名
+$box-shadow-sm: $shadow-sm;
+$box-shadow-md: $shadow-md;
+$box-shadow-lg: $shadow-lg;
+$shadow-sm: $shadow-xs;
+$shadow-md: $shadow-md;
+$shadow-lg: $shadow-lg;
 
 // 过渡
-$transition-fast: 0.2s ease;
-$transition-normal: 0.3s ease;
-$transition-slow: 0.5s ease;
+$transition-fast: 0.18s ease;
+$transition-normal: 0.28s ease;
+$transition-slow: 0.45s cubic-bezier(0.4, 0, 0.2, 1);

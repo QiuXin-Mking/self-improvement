@@ -1,17 +1,17 @@
 <template>
   <header class="app-header">
-    <h1 class="header-title">📚 知识库学习系统</h1>
+    <h1 class="header-title">KnowLoop</h1>
     <div class="stats-bar">
       <div class="stat-item">
-        <span class="stat-label">待复习:</span>
+        <span class="stat-label">待复习</span>
         <span class="stat-value">{{ store.stats.due_questions }}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">总问题:</span>
+        <span class="stat-label">总问题</span>
         <span class="stat-value">{{ store.stats.total_questions }}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">正确率:</span>
+        <span class="stat-label">正确率</span>
         <span class="stat-value">{{ store.stats.accuracy }}%</span>
       </div>
     </div>
@@ -26,20 +26,21 @@ const store = useLearningStore()
 
 <style lang="scss" scoped>
 .app-header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: $card-bg;
+  border: 1px solid $card-border;
   border-radius: $border-radius-md;
   padding: $spacing-lg;
   margin-bottom: $spacing-md;
-  box-shadow: $box-shadow-md;
+  box-shadow: $shadow-sm;
 }
 
 .header-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: $text-primary;
+  font-size: 22px;
+  font-weight: 700;
+  color: $ink-deep;
   margin-bottom: $spacing-md;
   text-align: center;
+  letter-spacing: 1px;
 }
 
 .stats-bar {
@@ -54,28 +55,25 @@ const store = useLearningStore()
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 80px;
+  min-width: 70px;
 }
 
 .stat-label {
-  font-size: 12px;
-  color: $text-secondary;
-  margin-bottom: 5px;
+  font-size: 11px;
+  color: $text-muted;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-value {
   font-size: 20px;
-  font-weight: bold;
-  color: $primary-gradient-start;
+  font-weight: 700;
+  color: $ink-blue;
 }
 
 @media (max-width: 480px) {
-  .header-title {
-    font-size: 20px;
-  }
-
-  .stat-value {
-    font-size: 18px;
-  }
+  .header-title { font-size: 20px; }
+  .stat-value { font-size: 18px; }
 }
 </style>

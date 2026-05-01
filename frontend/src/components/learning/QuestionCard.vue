@@ -30,7 +30,10 @@ defineEmits<{
 
 <style lang="scss" scoped>
 .question-card {
-  border-left: 4px solid $info-color;
+  border-left: 4px solid $ink-blue;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-left: 4px solid $ink-blue;
 }
 
 .question-section {
@@ -38,15 +41,17 @@ defineEmits<{
 }
 
 .question-label {
-  font-size: 14px;
-  font-weight: bold;
-  color: $text-secondary;
+  font-size: 12px;
+  font-weight: 600;
+  color: $ink-mid;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   margin-bottom: $spacing-sm;
 }
 
 .question-content {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.7;
   color: $text-primary;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -60,20 +65,40 @@ defineEmits<{
 
 .btn-show-answer {
   flex: 1;
-  background: $success-color;
+  background: $ink-blue;
   color: $text-white;
+  border: none;
+  border-radius: $border-radius-md;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-normal;
 
   &:hover {
-    background: color.scale($success-color, $lightness: -10%);
+    background: color.scale($ink-blue, $lightness: -8%);
+  }
+  &:active {
+    transform: scale(0.97);
   }
 }
 
 .btn-delete {
-  background: $error-color;
-  color: $text-white;
+  background: transparent;
+  color: $text-muted;
+  border: 1px solid $card-border;
+  border-radius: $border-radius-md;
+  padding: 12px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all $transition-normal;
 
   &:hover {
-    background: color.scale($error-color, $lightness: -10%);
+    color: $danger;
+    border-color: rgba($danger, 0.4);
+  }
+  &:active {
+    transform: scale(0.97);
   }
 }
 

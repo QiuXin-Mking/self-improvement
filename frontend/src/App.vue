@@ -13,7 +13,7 @@
 
 .app-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+  background: $bg-paper;
   padding: $spacing-sm;
 }
 </style>

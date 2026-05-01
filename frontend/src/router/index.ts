@@ -6,7 +6,6 @@ const LoginView = () => import('@/views/LoginView.vue')
 const RegisterView = () => import('@/views/RegisterView.vue')
 const DashboardView = () => import('@/views/DashboardView.vue')
 const LearningView = () => import('@/views/LearningView.vue') // Reusing existing component
-const ProtectedLayout = () => import('@/layouts/ProtectedLayout.vue')
 
 const routes = [
   {
@@ -41,7 +40,7 @@ const router = createRouter({
 })
 
 // Global navigation guard
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   console.log('Router guard: navigating to', to.path, 'name:', to.name)
   const authStore = useAuthStore()
   const token = authStore.token

@@ -19,7 +19,9 @@ defineProps<Props>()
 
 <style lang="scss" scoped>
 .answer-card {
-  border-left: 4px solid $success-color;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-left: 4px solid $amber;
 }
 
 .answer-section {

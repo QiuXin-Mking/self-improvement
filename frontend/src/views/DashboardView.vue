@@ -1,20 +1,26 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-header">
-      <h1 class="dashboard-title">欢迎，{{ user?.username }}！</h1>
+      <div class="greeting">
+        <h1 class="dashboard-title">欢迎，{{ user?.username }}</h1>
+        <p class="dashboard-subtitle">持之以恒，积微成著</p>
+      </div>
       <van-button type="default" size="small" @click="logout">退出登录</van-button>
     </div>
 
     <div class="dashboard-stats">
-      <div class="stat-card">
+      <div class="stat-card stat-card-total">
+        <div class="stat-icon">📚</div>
         <div class="stat-value">{{ stats.total_questions }}</div>
         <div class="stat-label">总问题数</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card stat-card-due">
+        <div class="stat-icon">📝</div>
         <div class="stat-value">{{ stats.due_questions }}</div>
         <div class="stat-label">今日待复习</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card stat-card-accuracy">
+        <div class="stat-icon">🎯</div>
         <div class="stat-value">{{ stats.accuracy }}%</div>
         <div class="stat-label">正确率</div>
       </div>
@@ -35,7 +41,7 @@
         type="default"
         size="large"
         block
-        style="margin-top: 16px;"
+        class="btn-init"
         @click="initDatabase"
       >
         重新初始化知识库
@@ -97,53 +103,89 @@ onMounted(async () => {
 .dashboard-container {
   padding: $spacing-lg;
   min-height: 100vh;
-  background: linear-gradient(135deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+  background: $bg-paper;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: $spacing-xl;
-  color: white;
 
-  .dashboard-title {
-    margin: 0;
-    font-size: $font-size-lg;
+  .greeting {
+    .dashboard-title {
+      margin: 0;
+      font-size: $font-size-xl;
+      color: $ink-deep;
+    }
+    .dashboard-subtitle {
+      margin: $spacing-xs 0 0;
+      font-size: $font-size-sm;
+      color: $text-muted;
+    }
   }
 }
 
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-md;
+  gap: $spacing-sm;
   margin-bottom: $spacing-xl;
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
   border-radius: $border-radius-lg;
-  padding: $spacing-md;
+  padding: $spacing-lg $spacing-sm;
   text-align: center;
-  color: white;
+  box-shadow: $shadow-sm;
 
-  .stat-value {
-    font-size: $font-size-xl;
-    font-weight: bold;
+  .stat-icon {
+    font-size: 24px;
     margin-bottom: $spacing-xs;
   }
 
+  .stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
   .stat-label {
-    font-size: $font-size-sm;
-    opacity: 0.8;
+    font-size: $font-size-xs;
+    opacity: 0.7;
+  }
+
+  &.stat-card-total {
+    background: $bg-cream;
+    border: 1px solid $card-border;
+    .stat-value { color: $ink-deep; }
+    .stat-label { color: $text-secondary; }
+  }
+
+  &.stat-card-due {
+    background: rgba($amber, 0.12);
+    border: 1px solid rgba($amber, 0.3);
+    .stat-value { color: $amber; }
+    .stat-label { color: $amber; opacity: 0.8; }
+  }
+
+  &.stat-card-accuracy {
+    background: rgba($success, 0.1);
+    border: 1px solid rgba($success, 0.25);
+    .stat-value { color: $success; }
+    .stat-label { color: $success; opacity: 0.8; }
   }
 }
 
 .dashboard-actions {
-  background: white;
+  background: $card-bg;
+  border: 1px solid $card-border;
   border-radius: $border-radius-lg;
   padding: $spacing-lg;
-  box-shadow: $shadow-md;
+  box-shadow: $shadow-card;
+
+  .btn-init {
+    margin-top: $spacing-md;
+  }
 }
 </style>

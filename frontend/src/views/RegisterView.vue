@@ -1,6 +1,9 @@
 <template>
   <div class="register-container">
     <div class="register-card">
+      <div class="brand-mark">◆</div>
+      <h1 class="app-title">KnowLoop</h1>
+      <p class="app-subtitle">开启你的知识旅程</p>
       <h2 class="register-title">注册</h2>
 
       <van-form @submit="onSubmit">
@@ -29,7 +32,7 @@
             :rules="[{ required: true, message: '请确认密码' }, { validator: confirmPasswordValidator, message: '两次输入密码不一致' }]"
           />
         </van-cell-group>
-        <div style="margin: 16px;">
+        <div class="form-actions">
           <van-button round block type="primary" native-type="submit">注册</van-button>
         </div>
       </van-form>
@@ -40,8 +43,7 @@
       </div>
     </div>
 
-    <!-- Loading -->
-    <van-loading v-if="isLoading" class="loading-overlay" size="24px" color="#1989fa" />
+    <van-loading v-if="isLoading" class="loading-overlay" size="24px" color="#2c3e6b" />
   </div>
 </template>
 
@@ -104,33 +106,65 @@ const onSubmit = async () => {
   align-items: center;
   min-height: 100vh;
   padding: $spacing-lg;
-  background: linear-gradient(135deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+  background: $bg-paper;
 }
 
 .register-card {
   width: 100%;
   max-width: 400px;
-  padding: $spacing-xl;
-  background: white;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-lg;
+  padding: $spacing-2xl $spacing-xl;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-card;
+
+  .brand-mark {
+    text-align: center;
+    font-size: 32px;
+    color: $amber;
+    margin-bottom: $spacing-sm;
+  }
+
+  .app-title {
+    text-align: center;
+    margin-bottom: $spacing-xs;
+    color: $ink-deep;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  .app-subtitle {
+    text-align: center;
+    color: $text-muted;
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-xl;
+    letter-spacing: 1px;
+  }
 
   .register-title {
     text-align: center;
     margin-bottom: $spacing-xl;
     color: $text-primary;
-    font-size: $font-size-xl;
+    font-size: $font-size-lg;
+    font-weight: 500;
+  }
+
+  .form-actions {
+    margin: $spacing-md;
   }
 
   .login-link {
     text-align: center;
     margin-top: $spacing-md;
     color: $text-secondary;
+    font-size: $font-size-sm;
 
     a {
-      color: $color-primary;
+      color: $ink-blue;
       text-decoration: none;
       margin-left: $spacing-xs;
+      font-weight: 500;
     }
   }
 }

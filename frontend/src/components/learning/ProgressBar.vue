@@ -17,11 +17,13 @@ defineProps<Props>()
 <style lang="scss" scoped>
 .progress-bar {
   position: relative;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: $border-radius-lg;
+  height: 44px;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: $border-radius-md;
   overflow: hidden;
   margin-bottom: $spacing-md;
+  box-shadow: $shadow-xs;
 }
 
 .progress-fill {
@@ -29,9 +31,9 @@ defineProps<Props>()
   left: 0;
   top: 0;
   height: 100%;
-  background: linear-gradient(90deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+  background: linear-gradient(90deg, $ink-blue 0%, $ink-mid 100%);
   transition: width $transition-normal;
-  border-radius: $border-radius-lg;
+  border-radius: $border-radius-md;
 }
 
 .progress-text {
@@ -39,10 +41,10 @@ defineProps<Props>()
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
   color: $text-white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   z-index: 1;
 }
 </style>

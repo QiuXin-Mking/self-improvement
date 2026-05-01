@@ -102,6 +102,19 @@ func main() {
 		port = "4430"
 	}
 
+	// Serve frontend static files
+	staticDir := os.Getenv("STATIC_DIR")
+	if staticDir == "" {
+		staticDir = "dist"
+	}
+	r.Static("/assets", filepath.Join(staticDir, "assets"))
+	r.StaticFile("/vite.svg", filepath.Join(staticDir, "vite.svg"))
+
+	// SPA fallback
+	r.NoRoute(func(c *gin.Context) {
+		c.File(filepath.Join(staticDir, "index.html"))
+	})
+
 	r.Run("0.0.0.0:" + port)
 }
 

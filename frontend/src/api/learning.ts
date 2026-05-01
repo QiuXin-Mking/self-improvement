@@ -1,7 +1,6 @@
 import api from './index'
 import type {
   Stats,
-  Question,
   DueQuestionsData,
   InitData,
   FeedbackLevel,
