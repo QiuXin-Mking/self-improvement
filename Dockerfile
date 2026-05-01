@@ -56,7 +56,7 @@ COPY migrations ./migrations
 COPY question_input* ./
 
 # Expose port
-EXPOSE 5000
+EXPOSE 4430
 
 # Command to run the application
 CMD ["./web_server"]

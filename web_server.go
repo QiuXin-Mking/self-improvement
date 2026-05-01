@@ -96,10 +96,10 @@ func main() {
 		protected.POST("/upload-zip", uploadZipHandler)
 	}
 
-	// Get port from environment, default to 5000
+	// Get port from environment, default to 4430
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "5000"
+		port = "4430"
 	}
 
 	r.Run("0.0.0.0:" + port)
