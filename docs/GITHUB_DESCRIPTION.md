@@ -1,4 +1,4 @@
-# 🎓 基于艾宾浩斯遗忘曲线的知识库学习系统
+# KnowLoop — 基于艾宾浩斯遗忘曲线的知识库学习系统
 
 一个基于艾宾浩斯遗忘曲线的科学学习系统，支持命令行（CLI）和 Web 界面两种使用方式。系统通过智能算法自动安排复习时间，帮助你高效记忆和掌握知识。
 
@@ -69,12 +69,12 @@ cd self-improvement
 go mod tidy
 
 # 初始化知识库
-go run main.go --init
+go run cli_server.go --init
 
 # 运行 CLI 应用
-go run main.go
+go run cli_server.go
 
-# 运行 Web 服务（默认端口 5000）
+# 运行 Web 服务（默认端口 4430）
 go run web_server.go
 ```
 
@@ -96,7 +96,7 @@ docker-compose up -d
 
 # 或者单独构建运行
 docker build -t spaced-repetition .
-docker run -p 5000:5000 spaced-repetition
+docker run -p 4430:4430 spaced-repetition
 ```
 
 ## 📝 使用方法
@@ -142,7 +142,7 @@ work/interviews
 
 ### Web 界面使用
 
-1. 访问 http://localhost:5000
+1. 访问 http://localhost:4430
 2. 注册/登录账号
 3. 点击"开始复习"
 4. 查看问题并回忆答案
@@ -154,28 +154,28 @@ work/interviews
 
 ```
 self-improvement/
-├── main.go                     # CLI 主程序
-├── web_server.go              # Web 服务器
+├── cli_server.go               # CLI 程序
+├── web_server.go               # Web 服务器
 ├── internal/
 │   ├── spacedrepetition/      # 艾宾浩斯算法
-│   ├── parser/               # Markdown 解析器
-│   ├── models/               # 数据模型
-│   └── middleware/           # JWT 认证中间件
-├── frontend/                 # Vue 3 前端项目
+│   ├── parser/                # Markdown 解析器
+│   ├── models/                # 数据模型
+│   └── middleware/            # JWT 认证中间件
+├── frontend/                  # Vue 3 前端项目
 │   ├── src/
 │   │   ├── api/            # API 调用
 │   │   ├── stores/         # Pinia 状态管理
 │   │   ├── views/          # 页面组件
 │   │   └── components/     # 可复用组件
-│   └── public/            # 静态资源
-├── scripts/
-│   ├── clear_learning_data.go   # 清除复习数据脚本
-│   └── clear_learning_data.sh  # Shell 版本清理脚本
-├── docs/                    # 文档目录
+├── scripts/                  # 构建和部署脚本
+│   ├── start.sh            # 启动服务
+│   ├── stop.sh             # 停止服务
+│   ├── compile.sh          # 编译项目
+│   └── deploy_to_huoshan.sh # 部署到服务器
+├── docs/                     # 文档目录
 ├── migrations/               # 数据库迁移文件
 ├── questions/                # 问题文件存放目录
-└── data/                    # 运行时数据（Git 忽略）
-    ├── learning_data.json
+└── data/                     # SQLite 数据库（Git 忽略）
     └── app.db
 ```
 
@@ -221,8 +221,7 @@ go run scripts/clear_learning_data.go
 - [使用指南](使用指南.md) - 中文快速上手指南
 - [部署指南](部署指南.md) - 服务器部署详细说明
 - [API 文档](API_DOCUMENTATION.md) - REST API 接口说明
-- [部署测试计划](DEPLOYMENT_TEST_PLAN.md) - 部署验证清单
-- [清除数据说明](docs/clear_learning_data.md) - 清理复习数据指南
+- [清除数据说明](clear_learning_data.md) - 清理复习数据指南
 
 ## 🚀 路线图
 

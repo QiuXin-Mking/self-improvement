@@ -121,7 +121,7 @@ make run-web
 JWT_SECRET=your-secret-key go run web_server.go
 ```
 
-访问 http://localhost:5000 开始使用。
+访问 http://localhost:4430 开始使用。
 
 ### 4. 用户使用流程
 
@@ -158,8 +158,8 @@ docker build -t spaced-repetition-multi-tenant .
 
 ```
 self-improvement/
-├── main.go                     # 主CLI程序
-├── web_server.go              # Web服务器（多租户版）
+├── cli_server.go              # CLI 程序
+├── web_server.go              # Web 服务器
 ├── internal/
 │   ├── models/                # 数据模型（用户、问题）
 │   │   ├── user.go
@@ -170,8 +170,6 @@ self-improvement/
 │   │   └── spaced_repetition.go
 │   └── parser/                # Markdown解析器
 │       └── parser.go
-├── handlers/                  # API处理器
-│   └── auth.go
 ├── migrations/                # 数据库迁移
 │   └── 001_initial_schema.sql
 ├── frontend/                  # Vue.js前端应用
@@ -191,7 +189,7 @@ self-improvement/
 ├── .env.example              # 环境变量示例
 ├── README.md                 # 说明文档
 ├── questions/                 # 存放问题文件（.md格式）
-└── data/                      # 学习数据（自动生成）
+└── data/                      # SQLite 数据库（自动生成）
     └── app.db
 ```
 

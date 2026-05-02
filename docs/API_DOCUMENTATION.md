@@ -2,7 +2,7 @@
 
 ## 基本信息
 
-- **Base URL**: `http://localhost:8000/api` (开发环境)
+- **Base URL**: `http://localhost:4430/api` (开发环境)
 - **认证方式**: Bearer Token (JWT)
 - **响应格式**: JSON
 
@@ -412,27 +412,27 @@ Markdown 问题文件需要遵循以下格式：
 
 ### 1. 注册新用户
 ```bash
-curl -X POST http://localhost:8000/api/register \
+curl -X POST http://localhost:4430/api/register \
   -H "Content-Type: application/json" \
   -d '{"username":"testuser","password":"123456"}'
 ```
 
 ### 2. 登录
 ```bash
-curl -X POST http://localhost:8000/api/login \
+curl -X POST http://localhost:4430/api/login \
   -H "Content-Type: application/json" \
   -d '{"username":"testuser","password":"123456"}'
 ```
 
 ### 3. 获取统计（需要 token）
 ```bash
-curl -X GET http://localhost:8000/api/stats \
+curl -X GET http://localhost:4430/api/stats \
   -H "Authorization: Bearer <token>"
 ```
 
 ### 4. 初始化知识库
 ```bash
-curl -X POST http://localhost:8000/api/init \
+curl -X POST http://localhost:4430/api/init \
   -H "Authorization: Bearer <token>"
 ```
 

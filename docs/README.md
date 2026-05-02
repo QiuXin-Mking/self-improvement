@@ -1,6 +1,6 @@
 # 基于艾宾浩斯遗忘曲线的知识库学习系统
 
-一个Go命令行应用，帮助你根据艾宾浩斯遗忘曲线科学地复习知识。
+基于艾宾浩斯遗忘曲线的科学学习系统，支持 CLI 和 Web 两种界面。
 
 ## 功能特点
 
@@ -73,7 +73,7 @@ path/to/other/questions
 ```bash
 make init
 # 或者
-go run main.go --init
+go run cli_server.go --init
 ```
 
 这将扫描配置的所有目录下的`.md`文件，提取问题和答案到知识库。
@@ -85,7 +85,7 @@ go run main.go --init
 ```bash
 make run-cli
 # 或者
-go run main.go
+go run cli_server.go
 ```
 
 程序会显示今天需要复习的问题。
@@ -108,7 +108,7 @@ go run main.go
 ```bash
 make stats
 # 或者
-go run main.go --stats
+go run cli_server.go --stats
 ```
 
 ## 艾宾浩斯遗忘曲线算法
@@ -124,24 +124,19 @@ go run main.go --stats
 
 ## 数据存储
 
-学习数据保存在 `data/learning_data.json` 文件中，包含：
-- 所有问题和答案
-- 复习历史
-- 记忆等级
-- 下次复习时间
-- 学习统计
+学习数据保存在 SQLite 数据库 `data/app.db` 中，支持多用户隔离。
 
 ## 命令参考
 
 ```bash
 # 初始化知识库
-go run main.go --init
+go run cli_server.go --init
 
 # 开始训练（默认）
-go run main.go
+go run cli_server.go
 
 # 查看统计
-go run main.go --stats
+go run cli_server.go --stats
 
 # 使用Makefile命令
 make init     # 初始化
@@ -162,23 +157,29 @@ make stats    # 查看统计
 
 ```
 self-improvement/
-├── main.go                     # 主CLI程序
-├── web_server.go              # Web服务器
+├── cli_server.go               # CLI 程序
+├── web_server.go               # Web 服务器
 ├── internal/
 │   ├── spacedrepetition/      # 艾宾浩斯算法
-│   │   └── spaced_repetition.go
-│   └── parser/                # Markdown解析器
-│       └── parser.go
-├── go.mod                    # Go模块定义
-├── go.sum                    # Go依赖校验
-├── Makefile                  # 构建脚本
-├── README.md                 # 说明文档
-├── 使用指南.md               # 中文快速指南
-├── 部署指南.md               # 服务器部署指南
-├── QUICK_START_DEPLOY.md     # 快速部署参考
-├── questions/                 # 存放问题文件（.md格式）
-└── data/                      # 学习数据（自动生成）
-    └── learning_data.json
+│   ├── parser/                # Markdown 解析器
+│   ├── models/                # 数据模型
+│   └── middleware/            # JWT 认证中间件
+├── frontend/                  # Vue 3 前端
+│   ├── src/
+│   │   ├── api/            # API 调用
+│   │   ├── stores/         # Pinia 状态管理
+│   │   ├── views/          # 页面组件
+│   │   └── components/     # 可复用组件
+├── scripts/                  # 构建和部署脚本
+│   ├── start.sh            # 启动服务
+│   ├── stop.sh             # 停止服务
+│   ├── compile.sh          # 编译项目
+│   └── deploy_to_huoshan.sh # 部署到服务器
+├── docs/                     # 文档
+├── migrations/               # 数据库迁移
+├── questions/                 # 问题文件（.md 格式）
+└── data/                      # SQLite 数据库（自动生成）
+    └── app.db
 ```
 
 ## Web界面
@@ -191,20 +192,14 @@ make run-web
 go run web_server.go
 ```
 
-访问 http://localhost:5000 来使用Web界面进行学习。
+访问 http://localhost:4430 来使用 Web 界面进行学习。
 
-## 编译二进制文件
-
-编译CLI和Web应用程序：
+## 编译
 
 ```bash
-make build
-# 或者分别构建
-make build-cli  # 构建CLI应用
-make build-web  # 构建Web应用
+./scripts/compile.sh                  # 构建 Go + 前端
+BUILD_TARGET=linux ./scripts/compile.sh  # 交叉编译 Linux
 ```
-
-编译后的文件将位于 `bin/` 目录。
 
 ## 示例问题文件
 
