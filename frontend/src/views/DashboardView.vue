@@ -125,10 +125,13 @@ const initDatabase = async () => {
     const response = await learningStore.initDatabase()
     if (response) {
       await learningStore.fetchStats()
+      showToast({ message: response.message || '知识库初始化成功', type: 'success' })
+    } else {
+      showToast({ message: '没有找到新的问题', type: 'fail' })
     }
-  } catch (error) {
-    console.error('Init error:', error)
-    showToast({ message: '初始化失败', type: 'fail' })
+  } catch (error: any) {
+    const errMsg = error?.response?.data?.error || '初始化失败'
+    showToast({ message: errMsg, type: 'fail' })
   }
 }
 
@@ -137,9 +140,9 @@ const fileInput = ref<HTMLInputElement>()
 const pendingImportType = ref<'zip' | 'md'>('zip')
 
 const importActions = [
-  { name: '上传 .md 文件', value: 'md', description: '导入单个 Markdown 题库文件' },
-  { name: '上传 zip 压缩包', value: 'zip', description: '批量导入多个 .md 文件' },
-  { name: '手动输入问题', value: 'manual', description: '逐条添加问题' },
+  { name: '上传 .md 文件', value: 'md', subname: '导入单个 Markdown 题库文件' },
+  { name: '上传 zip 压缩包', value: 'zip', subname: '批量导入多个 .md 文件' },
+  { name: '手动输入问题', value: 'manual', subname: '逐条添加问题' },
 ]
 
 const onImportSelect = (action: { value: string }) => {
