@@ -15,6 +15,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"self-improvement/internal/middleware"
 	"self-improvement/internal/models"
@@ -94,6 +95,7 @@ func main() {
 		protected.POST("/delete-question", deleteQuestionHandler)
 		protected.POST("/init", initDatabaseHandler)
 		protected.POST("/upload-zip", uploadZipHandler)
+		protected.POST("/upload-md", uploadMdHandler)
 	}
 
 	// Get port from environment, default to 4430
@@ -612,6 +614,95 @@ func uploadZipHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, Response{
 			Success: false,
 			Error:   "zip 文件中没有找到有效的问题！请确保包含格式正确的 .md 文件。",
+		})
+		return
+	}
+
+	imported, skipped, duplicates, err := importQuestions(userID, questions)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "导入问题失败",
+		})
+		return
+	}
+
+	stats, err := sr.GetStats(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "获取统计失败",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{
+		Success: true,
+		Data: map[string]interface{}{
+			"message":    "成功导入 " + strconv.Itoa(imported) + " 个新问题到知识库！",
+			"imported":   imported,
+			"skipped":    skipped,
+			"duplicates": duplicates,
+			"stats":      stats,
+		},
+	})
+}
+
+func uploadMdHandler(c *gin.Context) {
+	userId, _ := c.Get("user_id")
+	userID := userId.(uint)
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "请上传文件",
+		})
+		return
+	}
+
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+	if ext != ".md" && ext != ".markdown" {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "只支持 .md 或 .markdown 格式的文件",
+		})
+		return
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "无法打开上传的文件",
+		})
+		return
+	}
+	defer src.Close()
+
+	content, err := io.ReadAll(src)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "读取文件失败",
+		})
+		return
+	}
+
+	p, err := parser.NewQuestionParser()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "处理文件失败",
+		})
+		return
+	}
+
+	questions := p.ParseContent(string(content), file.Filename)
+	if len(questions) == 0 {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "文件中没有找到有效的问题！请使用 # q 和 # a 标记格式。",
 		})
 		return
 	}
