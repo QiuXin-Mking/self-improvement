@@ -5,7 +5,7 @@
         <h1 class="dashboard-title">欢迎，{{ user?.username }}</h1>
         <p class="dashboard-subtitle">持之以恒，积微成著</p>
       </div>
-      <van-button type="default" size="small" @click="logout">退出登录</van-button>
+      <button class="btn-logout" @click="logout">退出</button>
     </div>
 
     <div class="dashboard-stats">
@@ -122,6 +122,21 @@ onMounted(async () => {
       margin: $spacing-xs 0 0;
       font-size: $font-size-sm;
       color: $text-muted;
+    }
+  }
+
+  .btn-logout {
+    background: none;
+    border: none;
+    color: $text-muted;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    padding: 4px 0;
+    font-family: inherit;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $danger;
     }
   }
 }
