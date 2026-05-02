@@ -97,9 +97,11 @@ func (qp *QuestionParser) ParseContent(content, sourceFile string) []*Question {
 
 	for i, line := range lines {
 		trimmed := strings.TrimSpace(line)
-		if trimmed == "# q" || strings.HasPrefix(trimmed, "# q ") {
+		if trimmed == "# q" || strings.HasPrefix(trimmed, "# q ") ||
+			trimmed == "# question" || strings.HasPrefix(trimmed, "# question ") {
 			qPositions = append(qPositions, i)
-		} else if trimmed == "# a" || strings.HasPrefix(trimmed, "# a ") {
+		} else if trimmed == "# a" || strings.HasPrefix(trimmed, "# a ") ||
+			trimmed == "# answer" || strings.HasPrefix(trimmed, "# answer ") {
 			aPositions = append(aPositions, i)
 		}
 	}
