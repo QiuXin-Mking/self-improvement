@@ -77,6 +77,7 @@
       v-model:show="showManualDialog"
       title="添加问题"
       show-cancel-button
+      class="import-dialog"
       @confirm="onManualConfirm"
     >
       <div class="manual-entry-form">
@@ -334,13 +335,37 @@ onMounted(async () => {
 @use '@/styles/global.scss' as *;
 
 .manual-entry-form {
-  padding: $spacing-md;
+  padding: $spacing-lg $spacing-md;
 
   .van-cell {
     background: $bg-cream;
     border: 1px solid $card-border;
     border-radius: $border-radius-sm;
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+  }
+
+  .van-field__label {
+    color: $text-secondary;
+    font-weight: 500;
+    margin-right: $spacing-sm;
+  }
+}
+
+.import-dialog {
+  .van-dialog__header {
+    padding: $spacing-lg $spacing-lg $spacing-sm;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $ink-deep;
+  }
+
+  .van-dialog__content {
+    padding: 0;
+  }
+
+  .van-dialog__footer {
+    padding: $spacing-sm $spacing-lg $spacing-lg;
   }
 }
 </style>
