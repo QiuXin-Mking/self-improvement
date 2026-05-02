@@ -1,20 +1,20 @@
 package main
 
 import (
+	"archive/zip"
+	"bytes"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-	"strconv"
-	"time"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strconv"
 
 	"self-improvement/internal/middleware"
 	"self-improvement/internal/models"
@@ -512,7 +512,6 @@ func uploadZipHandler(c *gin.Context) {
 	userId, _ := c.Get("user_id")
 	userID := userId.(uint)
 
-	// Get file from form
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, Response{
@@ -522,7 +521,6 @@ func uploadZipHandler(c *gin.Context) {
 		return
 	}
 
-	// Check file extension (only allow .zip files)
 	ext := filepath.Ext(file.Filename)
 	if ext != ".zip" {
 		c.JSON(http.StatusBadRequest, Response{
@@ -532,28 +530,6 @@ func uploadZipHandler(c *gin.Context) {
 		return
 	}
 
-	// Get upload directory from environment, default to "uploads"
-	uploadDir := os.Getenv("UPLOAD_DIR")
-	if uploadDir == "" {
-		uploadDir = "uploads"
-	}
-
-	// Create uploads directory if it doesn't exist
-	userUploadDir := filepath.Join(uploadDir, fmt.Sprintf("user_%d", userID))
-	if err := os.MkdirAll(userUploadDir, 0755); err != nil {
-		c.JSON(http.StatusInternalServerError, Response{
-			Success: false,
-			Error:   "无法创建上传目录",
-		})
-		return
-	}
-
-	// Generate unique filename
-	timestamp := strconv.FormatInt(int64(userID), 10) + "_" + strconv.FormatInt(time.Now().Unix(), 10)
-	uniqueFilename := timestamp + "_" + file.Filename
-	filePath := filepath.Join(userUploadDir, uniqueFilename)
-
-	// Open uploaded file
 	src, err := file.Open()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Response{
@@ -564,33 +540,108 @@ func uploadZipHandler(c *gin.Context) {
 	}
 	defer src.Close()
 
-	// Create destination file
-	dst, err := os.Create(filePath)
+	zipBytes, err := io.ReadAll(src)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Response{
 			Success: false,
-			Error:   "无法保存文件",
+			Error:   "读取文件失败",
 		})
 		return
 	}
-	defer dst.Close()
 
-	// Copy file content
-	if _, err := io.Copy(dst, src); err != nil {
+	zipReader, err := zip.NewReader(bytes.NewReader(zipBytes), file.Size)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "无法解析 zip 文件，请确保文件未损坏",
+		})
+		return
+	}
+
+	tempDir, err := os.MkdirTemp("", "spaced-repetition-zip-*")
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, Response{
 			Success: false,
-			Error:   "保存文件失败",
+			Error:   "服务器内部错误",
+		})
+		return
+	}
+	defer os.RemoveAll(tempDir)
+
+	for _, f := range zipReader.File {
+		if f.FileInfo().IsDir() {
+			continue
+		}
+		dstPath := filepath.Join(tempDir, f.Name)
+		if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
+			continue
+		}
+		dst, err := os.Create(dstPath)
+		if err != nil {
+			continue
+		}
+		rc, err := f.Open()
+		if err != nil {
+			dst.Close()
+			continue
+		}
+		io.Copy(dst, rc)
+		rc.Close()
+		dst.Close()
+	}
+
+	p, err := parser.NewQuestionParser(tempDir)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "处理文件失败",
+		})
+		return
+	}
+
+	questions, err := p.ParseAllFiles()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "解析文件失败",
+		})
+		return
+	}
+
+	if len(questions) == 0 {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "zip 文件中没有找到有效的问题！请确保包含格式正确的 .md 文件。",
+		})
+		return
+	}
+
+	imported, skipped, duplicates, err := importQuestions(userID, questions)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "导入问题失败",
+		})
+		return
+	}
+
+	stats, err := sr.GetStats(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "获取统计失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, Response{
 		Success: true,
-		Message: "文件上传成功",
 		Data: map[string]interface{}{
-			"filename": uniqueFilename,
-			"path":     filePath,
-			"size":     file.Size,
+			"message":    "成功导入 " + strconv.Itoa(imported) + " 个新问题到知识库！",
+			"imported":   imported,
+			"skipped":    skipped,
+			"duplicates": duplicates,
+			"stats":      stats,
 		},
 	})
 }
