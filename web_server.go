@@ -42,6 +42,12 @@ type DeleteQuestionRequest struct {
 	QuestionID string `json:"question_id" binding:"required"`
 }
 
+// AddQuestionRequest represents the request body for adding a question manually
+type AddQuestionRequest struct {
+	Question string `json:"question" binding:"required"`
+	Answer   string `json:"answer" binding:"required"`
+}
+
 var db *gorm.DB
 var sr *spacedrepetition.SpacedRepetition
 
@@ -96,6 +102,7 @@ func main() {
 		protected.POST("/init", initDatabaseHandler)
 		protected.POST("/upload-zip", uploadZipHandler)
 		protected.POST("/upload-md", uploadMdHandler)
+		protected.POST("/add-question", addQuestionHandler)
 	}
 
 	// Get port from environment, default to 4430
@@ -733,6 +740,68 @@ func uploadMdHandler(c *gin.Context) {
 			"skipped":    skipped,
 			"duplicates": duplicates,
 			"stats":      stats,
+		},
+	})
+}
+
+func addQuestionHandler(c *gin.Context) {
+	var req AddQuestionRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "请提供问题和答案",
+		})
+		return
+	}
+
+	userId, _ := c.Get("user_id")
+	userID := userId.(uint)
+
+	questionText := strings.TrimSpace(req.Question)
+	answerText := strings.TrimSpace(req.Answer)
+
+	if questionText == "" || answerText == "" {
+		c.JSON(http.StatusBadRequest, Response{
+			Success: false,
+			Error:   "问题和答案不能为空",
+		})
+		return
+	}
+
+	var existingQuestion models.Question
+	err := db.Where("user_id = ? AND question_text = ?", userID, questionText).First(&existingQuestion).Error
+	if err == nil {
+		c.JSON(http.StatusConflict, Response{
+			Success: false,
+			Error:   "该问题已存在",
+		})
+		return
+	}
+
+	qID := fmt.Sprintf("q_%d_%s", userID, spacedrepetition.Hash(questionText))
+	err = sr.AddQuestion(userID, qID, questionText, answerText, "手动输入")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "添加问题失败",
+		})
+		return
+	}
+
+	stats, err := sr.GetStats(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "获取统计失败",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{
+		Success: true,
+		Message: "问题添加成功",
+		Data: map[string]interface{}{
+			"stats": stats,
 		},
 	})
 }
