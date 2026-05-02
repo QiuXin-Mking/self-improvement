@@ -160,15 +160,41 @@ const onSubmit = async () => {
 
   :deep(.van-cell-group--inset) {
     margin: 0;
+    background: transparent;
   }
 
   :deep(.van-cell-group--inset .van-cell) {
     margin-bottom: $spacing-md;
     border-radius: $border-radius-sm;
+    background: $bg-cream;
+    border: 1px solid $card-border;
+    padding: $spacing-sm $spacing-md;
+    transition: border-color $transition-fast;
+
+    &:focus-within {
+      border-color: $ink-blue;
+    }
   }
 
   :deep(.van-cell-group--inset .van-cell:last-child) {
     margin-bottom: 0;
+  }
+
+  :deep(.van-field__label) {
+    color: $ink-mid;
+    font-weight: 500;
+  }
+
+  :deep(.van-field__control::placeholder) {
+    color: $text-muted;
+  }
+
+  :deep(.van-field__body) {
+    color: $text-primary;
+  }
+
+  :deep(.van-cell:focus-within::after) {
+    border-color: $amber;
   }
 }
 
