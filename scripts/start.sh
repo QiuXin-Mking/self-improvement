@@ -3,10 +3,11 @@
 # 启动 spaced repetition 服务（前端 + 后端）
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FRONTEND_DIR="$SCRIPT_DIR/frontend"
-BACKEND_PID_FILE="$SCRIPT_DIR/.web_server.pid"
-FRONTEND_PID_FILE="$SCRIPT_DIR/.frontend.pid"
-LOGS_DIR="$SCRIPT_DIR/logs"
+PROJECT_DIR="$SCRIPT_DIR/.."
+FRONTEND_DIR="$PROJECT_DIR/frontend"
+BACKEND_PID_FILE="$PROJECT_DIR/.web_server.pid"
+FRONTEND_PID_FILE="$PROJECT_DIR/.frontend.pid"
+LOGS_DIR="$PROJECT_DIR/logs"
 
 # 创建日志目录
 mkdir -p "$LOGS_DIR"
@@ -50,7 +51,7 @@ echo "  日志: $FRONTEND_LOG_FILE"
 echo ""
 
 # 启动后端服务
-cd "$SCRIPT_DIR" || exit 1
+cd "$PROJECT_DIR" || exit 1
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 启动后端服务..." >> "$BACKEND_LOG_FILE"
 PORT="$BACKEND_PORT" JWT_SECRET="$JWT_SECRET" nohup go run web_server.go >> "$BACKEND_LOG_FILE" 2>&1 &
 BACKEND_PID=$!
@@ -73,7 +74,7 @@ ln -sf "$(basename "$FRONTEND_LOG_FILE")" "$FRONTEND_LOG_LINK"
 sleep 3
 
 # 检查后端服务
-cd "$SCRIPT_DIR" || exit 1
+cd "$PROJECT_DIR" || exit 1
 echo ""
 echo "--- 检查后端服务 ---"
 if ps -p "$BACKEND_PID" > /dev/null; then
@@ -113,4 +114,4 @@ echo ""
 echo "查看历史日志:"
 echo "  ls -lh $LOGS_DIR/"
 echo ""
-echo "停止服务: ./stop.sh"
+echo "停止服务: ./scripts/stop.sh"

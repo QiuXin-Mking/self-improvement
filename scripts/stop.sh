@@ -3,9 +3,10 @@
 # 停止 spaced repetition 服务（前端 + 后端）
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKEND_PID_FILE="$SCRIPT_DIR/.web_server.pid"
-FRONTEND_PID_FILE="$SCRIPT_DIR/.frontend.pid"
-LOGS_DIR="$SCRIPT_DIR/logs"
+PROJECT_DIR="$SCRIPT_DIR/.."
+BACKEND_PID_FILE="$PROJECT_DIR/.web_server.pid"
+FRONTEND_PID_FILE="$PROJECT_DIR/.frontend.pid"
+LOGS_DIR="$PROJECT_DIR/logs"
 BACKEND_LOG_LINK="$LOGS_DIR/backend.log"
 FRONTEND_LOG_LINK="$LOGS_DIR/frontend.log"
 
