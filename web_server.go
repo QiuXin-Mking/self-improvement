@@ -410,6 +410,44 @@ func deleteQuestionHandler(c *gin.Context) {
 	})
 }
 
+// importQuestions imports a batch of parsed questions for a user.
+// Returns import statistics or an error.
+func importQuestions(userID uint, questions []*parser.Question) (imported, skipped, duplicates int, err error) {
+	// Deduplicate based on question text
+	seenQuestions := make(map[string]bool)
+	var uniqueQuestions []*parser.Question
+
+	for _, q := range questions {
+		normalizedQ := q.QuestionText
+		if !seenQuestions[normalizedQ] {
+			seenQuestions[normalizedQ] = true
+			uniqueQuestions = append(uniqueQuestions, q)
+		} else {
+			duplicates++
+		}
+	}
+
+	for _, q := range uniqueQuestions {
+		qID := fmt.Sprintf("q_%d_%s", userID, spacedrepetition.Hash(q.QuestionText))
+
+		var existingQuestion models.Question
+		err := db.Where("user_id = ? AND question_text = ?", userID, q.QuestionText).First(&existingQuestion).Error
+
+		if err == nil {
+			skipped++
+			continue
+		}
+
+		err = sr.AddQuestion(userID, qID, q.QuestionText, q.AnswerText, q.SourceFile)
+		if err != nil {
+			continue
+		}
+		imported++
+	}
+
+	return imported, skipped, duplicates, nil
+}
+
 func initDatabaseHandler(c *gin.Context) {
 	userId, _ := c.Get("user_id")
 	userID := userId.(uint)
@@ -440,46 +478,13 @@ func initDatabaseHandler(c *gin.Context) {
 		return
 	}
 
-	// Deduplicate based on question text
-	seenQuestions := make(map[string]bool)
-	var uniqueQuestions []*parser.Question
-	duplicates := 0
-
-	for _, q := range questions {
-		normalizedQ := q.QuestionText
-		if !seenQuestions[normalizedQ] {
-			seenQuestions[normalizedQ] = true
-			uniqueQuestions = append(uniqueQuestions, q)
-		} else {
-			duplicates++
-		}
-	}
-
-	// Process questions and associate with current user
-	imported := 0
-	skipped := 0
-
-	for _, q := range uniqueQuestions {
-		// Include user ID in the hash to ensure uniqueness across users
-		qID := fmt.Sprintf("q_%d_%s", userID, spacedrepetition.Hash(q.QuestionText))
-
-		// Check if this question already exists for this user
-		var existingQuestion models.Question
-		err := db.Where("user_id = ? AND question_text = ?", userID, q.QuestionText).First(&existingQuestion).Error
-
-		if err == nil {
-			// Question already exists for this user
-			skipped++
-			continue
-		}
-
-		// Add the question for this user
-		err = sr.AddQuestion(userID, qID, q.QuestionText, q.AnswerText, q.SourceFile)
-		if err != nil {
-			// Log error but continue processing
-			continue
-		}
-		imported++
+	imported, skipped, duplicates, err := importQuestions(userID, questions)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Success: false,
+			Error:   "导入问题失败",
+		})
+		return
 	}
 
 	stats, err := sr.GetStats(userID)
