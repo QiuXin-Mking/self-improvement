@@ -131,6 +131,48 @@ export const useLearningStore = defineStore('learning', () => {
     }
   }
 
+  async function uploadZip(file: File) {
+    try {
+      const response = await learningApi.uploadZip(file)
+      if (response.success && response.data) {
+        stats.value = response.data.stats
+        return response.data
+      }
+      return null
+    } catch (error) {
+      console.error('上传 zip 失败:', error)
+      throw error
+    }
+  }
+
+  async function uploadMd(file: File) {
+    try {
+      const response = await learningApi.uploadMd(file)
+      if (response.success && response.data) {
+        stats.value = response.data.stats
+        return response.data
+      }
+      return null
+    } catch (error) {
+      console.error('上传 md 失败:', error)
+      throw error
+    }
+  }
+
+  async function addQuestion(question: string, answer: string) {
+    try {
+      const response = await learningApi.addQuestion(question, answer)
+      if (response.success && response.data) {
+        stats.value = response.data.stats
+        return response.data
+      }
+      return null
+    } catch (error) {
+      console.error('添加问题失败:', error)
+      throw error
+    }
+  }
+
   function showAnswer() {
     isAnswerVisible.value = true
   }
@@ -164,6 +206,9 @@ export const useLearningStore = defineStore('learning', () => {
     submitFeedback,
     deleteCurrentQuestion,
     initDatabase,
+    uploadZip,
+    uploadMd,
+    addQuestion,
     showAnswer,
     nextQuestion,
     reset
