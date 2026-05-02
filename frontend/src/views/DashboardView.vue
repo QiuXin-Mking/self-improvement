@@ -38,6 +38,23 @@
       </van-button>
 
       <van-button
+        type="primary"
+        size="large"
+        block
+        class="btn-import"
+        @click="showImportSheet = true"
+      >
+        导入知识
+      </van-button>
+
+      <van-action-sheet
+        v-model:show="showImportSheet"
+        title="选择导入方式"
+        :actions="importActions"
+        @select="onImportSelect"
+      />
+
+      <van-button
         type="default"
         size="large"
         block
@@ -47,11 +64,39 @@
         重新初始化知识库
       </van-button>
     </div>
+
+    <input
+      ref="fileInput"
+      type="file"
+      accept=".zip,.md,.markdown"
+      style="display: none"
+      @change="onFileSelected"
+    />
+
+    <van-dialog
+      v-model:show="showManualDialog"
+      title="添加问题"
+      show-cancel-button
+      @confirm="onManualConfirm"
+    >
+      <div class="manual-entry-form">
+        <van-field
+          v-model="manualQuestion"
+          label="问题"
+          placeholder="输入问题内容"
+        />
+        <van-field
+          v-model="manualAnswer"
+          label="答案"
+          placeholder="输入答案内容"
+        />
+      </div>
+    </van-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useLearningStore } from '@/stores/learning'
@@ -83,6 +128,81 @@ const initDatabase = async () => {
   } catch (error) {
     console.error('Init error:', error)
     showToast({ message: '初始化失败', type: 'fail' })
+  }
+}
+
+const showImportSheet = ref(false)
+const fileInput = ref<HTMLInputElement>()
+const pendingImportType = ref<'zip' | 'md'>('zip')
+
+const importActions = [
+  { name: '上传 .md 文件', value: 'md', description: '导入单个 Markdown 题库文件' },
+  { name: '上传 zip 压缩包', value: 'zip', description: '批量导入多个 .md 文件' },
+  { name: '手动输入问题', value: 'manual', description: '逐条添加问题' },
+]
+
+const onImportSelect = (action: { value: string }) => {
+  showImportSheet.value = false
+
+  if (action.value === 'zip' || action.value === 'md') {
+    pendingImportType.value = action.value as 'zip' | 'md'
+    fileInput.value?.click()
+  } else if (action.value === 'manual') {
+    showManualEntryDialog()
+  }
+}
+
+const onFileSelected = async () => {
+  const file = fileInput.value?.files?.[0]
+  if (!file) return
+
+  try {
+    let result
+    if (pendingImportType.value === 'zip') {
+      result = await learningStore.uploadZip(file)
+    } else {
+      result = await learningStore.uploadMd(file)
+    }
+
+    if (result) {
+      showToast({ message: result.message || '导入成功', type: 'success' })
+    }
+  } catch (error: any) {
+    const errMsg = error?.response?.data?.error || '导入失败'
+    showToast({ message: errMsg, type: 'fail' })
+  }
+
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
+}
+
+const showManualDialog = ref(false)
+const manualQuestion = ref('')
+const manualAnswer = ref('')
+
+const showManualEntryDialog = () => {
+  manualQuestion.value = ''
+  manualAnswer.value = ''
+  showManualDialog.value = true
+}
+
+const onManualConfirm = async () => {
+  const q = manualQuestion.value.trim()
+  const a = manualAnswer.value.trim()
+
+  if (!q || !a) {
+    showToast({ message: '问题和答案不能为空', type: 'fail' })
+    return
+  }
+
+  try {
+    await learningStore.addQuestion(q, a)
+    showToast({ message: '问题添加成功', type: 'success' })
+    showManualDialog.value = false
+  } catch (error: any) {
+    const errMsg = error?.response?.data?.error || '添加失败'
+    showToast({ message: errMsg, type: 'fail' })
   }
 }
 
@@ -199,8 +319,28 @@ onMounted(async () => {
   padding: $spacing-lg;
   box-shadow: $shadow-card;
 
+  .btn-import {
+    margin-bottom: $spacing-md;
+  }
+
   .btn-init {
-    margin-top: $spacing-md;
+    margin-top: 0;
+  }
+}
+
+</style>
+
+<style lang="scss">
+@use '@/styles/global.scss' as *;
+
+.manual-entry-form {
+  padding: $spacing-md;
+
+  .van-cell {
+    background: $bg-cream;
+    border: 1px solid $card-border;
+    border-radius: $border-radius-sm;
+    margin-bottom: $spacing-sm;
   }
 }
 </style>
