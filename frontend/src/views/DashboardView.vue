@@ -319,9 +319,12 @@ onMounted(async () => {
   border-radius: $border-radius-lg;
   padding: $spacing-lg;
   box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
 
   .btn-import {
-    margin-bottom: $spacing-md;
+    margin-bottom: 0;
   }
 
   .btn-init {
