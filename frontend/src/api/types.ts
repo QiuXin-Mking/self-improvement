@@ -38,6 +38,14 @@ export interface InitData {
   stats: Stats
 }
 
+export interface ImportResult {
+  message: string
+  imported: number
+  skipped: number
+  duplicates: number
+  stats: Stats
+}
+
 export type FeedbackLevel = 1 | 2 | 3 | 4
 
 // Auth types
