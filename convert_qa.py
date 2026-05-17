@@ -35,9 +35,15 @@ MAX_RETRIES = 3
 EXCLUDE_NAMES = {'投资.md', '服务器列表.md', 'image.png', '.gitkeep'}
 EXCLUDE_PATHS = {'99_archive', '.git', '.claude', '.ralph', '.vscode', '.devcontainer'}
 
-MODEL = "claude-sonnet-4-20250514"
+MODEL = os.environ.get('ANTHROPIC_MODEL', 'claude-sonnet-4-20250514')
 
-client = Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY'))
+_api_key = os.environ.get('ANTHROPIC_AUTH_TOKEN') or os.environ.get('ANTHROPIC_API_KEY')
+_base_url = os.environ.get('ANTHROPIC_BASE_URL')
+
+client_kwargs = {'api_key': _api_key}
+if _base_url:
+    client_kwargs['base_url'] = _base_url
+client = Anthropic(**client_kwargs)
 
 # ── Progress tracking ──────────────────────────────────────────
 
@@ -102,7 +108,14 @@ def call_claude(system_prompt, user_prompt):
                 ],
                 messages=[{"role": "user", "content": user_prompt}],
             )
-            return response.content[0].text
+            # Extract text from response, handling models that return ThinkingBlock
+            for block in response.content:
+                if hasattr(block, 'text') and block.text:
+                    return block.text
+            # Fallback: try the first content block
+            if response.content:
+                return str(response.content[0])
+            return None
         except RateLimitError:
             wait = SLEEP_ON_RATE_LIMIT * (attempt + 1)
             print(f"  Rate limited, waiting {wait}s...")
@@ -123,7 +136,9 @@ def call_claude(system_prompt, user_prompt):
 def parse_qa_from_response(response_text):
     """Parse Claude's response into list of (question, answer) tuples.
 
-    Looks for # q / # a markers. Same logic as internal/parser/parser.go.
+    Handles two formats:
+    1. Multiline:  # q\\n<text>\\n# a\\n<text>
+    2. Inline:     # q <text>\\n# a <text>
     """
     lines = response_text.split('\n')
     q_positions = []
@@ -138,14 +153,35 @@ def parse_qa_from_response(response_text):
 
     pairs = []
     for i, q_pos in enumerate(q_positions):
-        if i < len(a_positions):
-            a_pos = a_positions[i]
-            q_text = '\n'.join(lines[q_pos+1:a_pos]).strip()
-            next_q = q_positions[i+1] if i+1 < len(q_positions) else len(lines)
-            a_text = '\n'.join(lines[a_pos+1:next_q]).strip()
+        if i >= len(a_positions):
+            break
+        a_pos = a_positions[i]
 
-            if q_text and a_text:
-                pairs.append((q_text, a_text))
+        q_line = lines[q_pos].strip()
+        a_line = lines[a_pos].strip()
+
+        # Extract question text
+        if q_line == '# q':
+            # Multiline: text is between # q line and # a line
+            q_text = '\n'.join(lines[q_pos+1:a_pos]).strip()
+        else:
+            # Inline: text follows '# q ' on same line
+            q_text = q_line[4:].strip()
+
+        # Extract answer text
+        next_q = q_positions[i+1] if i+1 < len(q_positions) else len(lines)
+        if a_line == '# a':
+            # Multiline: text is between # a line and next # q
+            a_text = '\n'.join(lines[a_pos+1:next_q]).strip()
+        else:
+            # Inline: text follows '# a ' on same line
+            a_text = a_line[4:].strip()
+            extra_lines = '\n'.join(lines[a_pos+1:next_q]).strip()
+            if extra_lines:
+                a_text += '\n' + extra_lines
+
+        if q_text and a_text:
+            pairs.append((q_text, a_text))
 
     return pairs
 
@@ -213,9 +249,8 @@ def process_file(rel_path, abs_path, progress):
 def main():
     print("=== KB-to-SR Converter ===\n")
 
-    if not os.environ.get('ANTHROPIC_API_KEY'):
-        print("ERROR: ANTHROPIC_API_KEY not set.")
-        print("Copy .env.example to .env and set your API key, or export ANTHROPIC_API_KEY.")
+    if not _api_key:
+        print("ERROR: ANTHROPIC_AUTH_TOKEN or ANTHROPIC_API_KEY not set.")
         sys.exit(1)
 
     all_files = collect_files()
