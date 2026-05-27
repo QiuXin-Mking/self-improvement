@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { learningApi } from '@/api/learning'
-import type { Question, Stats } from '@/api/types'
+import type { Question, Stats, Category } from '@/api/types'
 
 export const useLearningStore = defineStore('learning', () => {
   // 状态
@@ -13,9 +13,12 @@ export const useLearningStore = defineStore('learning', () => {
     accuracy: 0
   })
 
+  const categories = ref<Category[]>([])
   const questions = ref<Question[]>([])
   const currentQuestionIndex = ref(0)
   const isAnswerVisible = ref(false)
+  // Comma-separated category names for current review session
+  const activeCategories = ref<string>('')
 
   // 计算属性
   const currentQuestion = computed(() => {
@@ -44,9 +47,23 @@ export const useLearningStore = defineStore('learning', () => {
     }
   }
 
-  async function fetchDueQuestions() {
+  async function fetchCategories() {
     try {
-      const response = await learningApi.getDueQuestions()
+      const response = await learningApi.getCategories()
+      if (response.success && response.data) {
+        categories.value = response.data.categories || []
+        return categories.value
+      }
+      return []
+    } catch (error) {
+      console.error('获取分类失败:', error)
+      return []
+    }
+  }
+
+  async function fetchDueQuestions(category?: string) {
+    try {
+      const response = await learningApi.getDueQuestions(category)
       if (response.success && response.data) {
         questions.value = response.data.questions || []
         currentQuestionIndex.value = 0
@@ -191,9 +208,11 @@ export const useLearningStore = defineStore('learning', () => {
   return {
     // State
     stats,
+    categories,
     questions,
     currentQuestionIndex,
     isAnswerVisible,
+    activeCategories,
 
     // Computed
     currentQuestion,
@@ -202,6 +221,7 @@ export const useLearningStore = defineStore('learning', () => {
 
     // Actions
     fetchStats,
+    fetchCategories,
     fetchDueQuestions,
     submitFeedback,
     deleteCurrentQuestion,

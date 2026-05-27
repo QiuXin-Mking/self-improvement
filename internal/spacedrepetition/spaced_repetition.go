@@ -25,7 +25,7 @@ func NewSpacedRepetition(db *gorm.DB) *SpacedRepetition {
 }
 
 // AddQuestion adds a new question to the user's knowledge base
-func (sr *SpacedRepetition) AddQuestion(userID uint, id, question, answer, source string) error {
+func (sr *SpacedRepetition) AddQuestion(userID uint, id, question, answer, source, category string) error {
 	now := time.Now()
 	q := models.Question{
 		ID:           id,
@@ -33,6 +33,7 @@ func (sr *SpacedRepetition) AddQuestion(userID uint, id, question, answer, sourc
 		QuestionText: question,
 		AnswerText:   answer,
 		Source:       source,
+		Category:     category,
 		Level:        4, // Start as completely forgotten
 		NextReview:   now,
 		ReviewCount:  0,
@@ -58,6 +59,59 @@ func (sr *SpacedRepetition) GetDueQuestions(userID uint) ([]*models.Question, er
 	}
 
 	return questions, nil
+}
+
+// GetDueQuestionsByCategory returns due questions filtered by category
+func (sr *SpacedRepetition) GetDueQuestionsByCategory(userID uint, category string) ([]*models.Question, error) {
+	now := time.Now()
+	var questions []*models.Question
+
+	err := sr.DB.Where("user_id = ? AND next_review <= ? AND category = ?", userID, now, category).
+		Order("next_review ASC").
+		Find(&questions).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return questions, nil
+}
+
+// GetCategories returns all distinct categories with stats for a user
+func (sr *SpacedRepetition) GetCategories(userID uint) ([]map[string]interface{}, error) {
+	type CategoryStats struct {
+		Category string
+		Total    int64
+	}
+
+	var results []CategoryStats
+	err := sr.DB.Model(&models.Question{}).
+		Select("category, COUNT(*) as total").
+		Where("user_id = ? AND category != ''", userID).
+		Group("category").
+		Order("category ASC").
+		Find(&results).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	var categories []map[string]interface{}
+	for _, r := range results {
+		var due int64
+		sr.DB.Model(&models.Question{}).
+			Where("user_id = ? AND category = ? AND next_review <= ?", userID, r.Category, now).
+			Count(&due)
+
+		categories = append(categories, map[string]interface{}{
+			"name":  r.Category,
+			"total": r.Total,
+			"due":   due,
+		})
+	}
+
+	return categories, nil
 }
 
 // GetQuestion returns a specific question by ID for the user
@@ -90,10 +144,10 @@ func (sr *SpacedRepetition) UpdateReview(userID uint, id string, feedback int) e
 
 	// Calculate next review time based on feedback
 	intervals := map[int]time.Duration{
-		1: 7 * 24 * time.Hour,  // Proficient: 7 days
-		2: 3 * 24 * time.Hour,  // Fair: 3 days
-		3: 24 * time.Hour,      // Forgotten: 1 day
-		4: 2 * time.Hour,       // Completely forgotten: 2 hours
+		1: 7 * 24 * time.Hour, // Proficient: 7 days
+		2: 3 * 24 * time.Hour, // Fair: 3 days
+		3: 24 * time.Hour,     // Forgotten: 1 day
+		4: 2 * time.Hour,      // Completely forgotten: 2 hours
 	}
 
 	baseInterval := intervals[feedback]

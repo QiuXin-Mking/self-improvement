@@ -5,7 +5,8 @@ import { useAuthStore } from '@/stores/auth'
 const LoginView = () => import('@/views/LoginView.vue')
 const RegisterView = () => import('@/views/RegisterView.vue')
 const DashboardView = () => import('@/views/DashboardView.vue')
-const LearningView = () => import('@/views/LearningView.vue') // Reusing existing component
+const LearningView = () => import('@/views/LearningView.vue')
+const CategorySelectView = () => import('@/views/CategorySelectView.vue')
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardView
+  },
+  {
+    path: '/categories',
+    name: 'Categories',
+    component: CategorySelectView
   },
   {
     path: '/learn',

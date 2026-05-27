@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { onMounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { showDialog, showToast } from 'vant'
 import { useLearningStore } from '@/stores/learning'
 import { storeToRefs } from 'pinia'
@@ -31,6 +31,7 @@ import AnswerCard from '@/components/learning/AnswerCard.vue'
 import FeedbackButtons from '@/components/learning/FeedbackButtons.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 const store = useLearningStore()
 const { progress, progressText, currentQuestion, isAnswerVisible, questions } = storeToRefs(store)
@@ -104,8 +105,12 @@ onMounted(async () => {
   // 滚动到顶部
   window.scrollTo({ top: 0 })
 
+  // 获取分类参数
+  const categoriesParam = route.query.categories as string | undefined
+  store.activeCategories = categoriesParam || ''
+
   // 获取待复习问题
-  const result = await store.fetchDueQuestions()
+  const result = await store.fetchDueQuestions(categoriesParam)
 
   // 如果没有问题且需要初始化
   if (result && result.needsInit) {

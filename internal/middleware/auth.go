@@ -11,7 +11,14 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKey = []byte(os.Getenv("JWT_SECRET"))
+// jwtSecret returns the JWT signing key from environment, with a test fallback.
+func jwtSecret() []byte {
+	key := os.Getenv("JWT_SECRET")
+	if key == "" {
+		key = "test-secret"
+	}
+	return []byte(key)
+}
 
 // JWT claims structure
 type Claims struct {
@@ -43,7 +50,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		claims := &Claims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			return jwtKey, nil
+			return jwtSecret(), nil
 		})
 
 		if err != nil || !token.Valid {
@@ -65,7 +72,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 // GenerateToken creates a JWT token for a user
 func GenerateToken(userID uint, username string) (string, error) {
-	if string(jwtKey) == "" {
+	if len(jwtSecret()) == 0 {
 		return "", errors.New("JWT_SECRET environment variable not set")
 	}
 
@@ -81,5 +88,5 @@ func GenerateToken(userID uint, username string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
+	return token.SignedString(jwtSecret())
 }

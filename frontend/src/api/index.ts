@@ -30,19 +30,20 @@ api.interceptors.response.use(
     return response.data
   },
   (error: AxiosError) => {
-    const message = (error.response?.data as any)?.error || '网络错误，请重试'
-
-    // If receiving 401, redirect to login (could be implemented here)
     if (error.response?.status === 401) {
-      // Optionally redirect to login page
-      // router.push('/login')
+      localStorage.removeItem('token')
+      showToast({
+        type: 'fail',
+        message: '登录已过期，请重新登录',
+        duration: 1500
+      })
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 800)
+      return Promise.reject(error)
     }
 
-    showToast({
-      type: 'fail',
-      message,
-      duration: 2000
-    })
+    // For other errors, let the caller handle the toast
     return Promise.reject(error)
   }
 )

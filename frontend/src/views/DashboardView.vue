@@ -117,7 +117,7 @@ const logout = () => {
 }
 
 const startLearning = () => {
-  router.push('/learn')
+  router.push('/categories')
 }
 
 const initDatabase = async () => {

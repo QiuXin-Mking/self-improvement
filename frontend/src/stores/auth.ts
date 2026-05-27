@@ -26,9 +26,10 @@ export const useAuthStore = defineStore('auth', () => {
       } else {
         return { success: false, message: response.error || 'Login failed' }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error)
-      return { success: false, message: 'Network error occurred' }
+      const msg = error?.response?.data?.error || '网络错误，请重试'
+      return { success: false, message: msg }
     }
   }
 

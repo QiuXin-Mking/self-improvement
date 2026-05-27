@@ -7,6 +7,18 @@ export interface Question {
   review_count: number
   correct_count: number
   source: string
+  category: string
+}
+
+export interface Category {
+  name: string
+  label: string
+  total: number
+  due: number
+}
+
+export interface CategoriesData {
+  categories: Category[]
 }
 
 export interface Stats {

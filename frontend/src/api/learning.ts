@@ -2,6 +2,7 @@ import api from './index'
 import type {
   Stats,
   DueQuestionsData,
+  CategoriesData,
   InitData,
   ImportResult,
   FeedbackLevel,
@@ -14,9 +15,15 @@ export const learningApi = {
     return api.get('/stats')
   },
 
+  // 获取分类列表
+  getCategories(): Promise<ApiResponse<CategoriesData>> {
+    return api.get('/categories')
+  },
+
   // 获取待复习问题
-  getDueQuestions(): Promise<ApiResponse<DueQuestionsData>> {
-    return api.get('/due-questions')
+  getDueQuestions(category?: string): Promise<ApiResponse<DueQuestionsData>> {
+    const params = category ? { category } : {}
+    return api.get('/due-questions', { params })
   },
 
   // 提交复习反馈
