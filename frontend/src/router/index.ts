@@ -67,7 +67,16 @@ router.beforeEach(async (to, _from, next) => {
   } else {
     // Protected routes
     if (token) {
-      console.log('Router guard: has token, allowing protected route')
+      console.log('Router guard: has token, loading user profile')
+      if (!authStore.user) {
+        const ok = await authStore.loadUserProfile()
+        if (!ok) {
+          console.log('Router guard: profile load failed, redirecting to login')
+          next('/login')
+          return
+        }
+      }
+      console.log('Router guard: allowing protected route')
       next()
     } else {
       console.log('Router guard: no token, redirecting to login')
