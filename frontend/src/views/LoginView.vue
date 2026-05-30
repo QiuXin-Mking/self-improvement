@@ -51,7 +51,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { showSuccessToast, showFailToast } from 'vant'
+import { showFailToast } from 'vant'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -71,11 +71,7 @@ const onSubmit = async () => {
     const result = await authStore.login(username.value, password.value)
 
     if (result.success) {
-      showSuccessToast({
-        message: result.message || '登录成功',
-        position: 'top'
-      })
-      // Redirect to dashboard after successful login
+      // 直接跳转，无需 toast（跳转本身即是成功反馈，避免白框闪烁）
       router.push('/dashboard')
     } else {
       showFailToast({
@@ -101,10 +97,6 @@ const demoLogin = async () => {
     const result = await authStore.login('demo', 'demo123')
 
     if (result.success) {
-      showSuccessToast({
-        message: '欢迎体验 KnowLoop！',
-        position: 'top'
-      })
       router.push('/dashboard')
     } else {
       showFailToast({
