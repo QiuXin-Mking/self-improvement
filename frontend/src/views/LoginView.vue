@@ -27,6 +27,14 @@
         <div class="form-actions">
           <van-button round block type="primary" native-type="submit">登录</van-button>
         </div>
+
+        <div class="demo-section">
+          <div class="demo-divider"><span>or</span></div>
+          <van-button round block plain type="warning" class="btn-demo" @click="demoLogin">
+            🎯 一键体验
+          </van-button>
+          <p class="demo-hint">无需注册，点击即可体验完整功能</p>
+        </div>
       </van-form>
 
       <div class="register-link">
@@ -77,6 +85,35 @@ const onSubmit = async () => {
     }
   } catch (error) {
     console.error('Login error:', error)
+    showFailToast({
+      message: '登录时发生错误',
+      position: 'top'
+    })
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const demoLogin = async () => {
+  isLoading.value = true
+
+  try {
+    const result = await authStore.login('demo', 'demo123')
+
+    if (result.success) {
+      showSuccessToast({
+        message: '欢迎体验 KnowLoop！',
+        position: 'top'
+      })
+      router.push('/dashboard')
+    } else {
+      showFailToast({
+        message: result.message || '体验登录失败',
+        position: 'top'
+      })
+    }
+  } catch (error) {
+    console.error('Demo login error:', error)
     showFailToast({
       message: '登录时发生错误',
       position: 'top'
@@ -142,6 +179,46 @@ const onSubmit = async () => {
 
   .form-actions {
     margin: $spacing-md;
+  }
+
+  .demo-section {
+    margin: $spacing-md;
+
+    .demo-divider {
+      display: flex;
+      align-items: center;
+      margin-bottom: $spacing-md;
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: $card-border;
+      }
+
+      span {
+        padding: 0 $spacing-sm;
+        color: $text-muted;
+        font-size: $font-size-xs;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+
+    .btn-demo {
+      font-size: $font-size-md;
+      font-weight: 600;
+      border-width: 2px;
+    }
+
+    .demo-hint {
+      text-align: center;
+      margin-top: $spacing-sm;
+      color: $text-muted;
+      font-size: $font-size-xs;
+      margin-bottom: 0;
+    }
   }
 
   .register-link {

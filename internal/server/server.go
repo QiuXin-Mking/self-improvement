@@ -125,6 +125,9 @@ func Run() {
 		panic("failed to migrate database")
 	}
 
+	// Composite index for due-questions query: WHERE user_id + ORDER BY next_review
+	db.Exec("CREATE INDEX IF NOT EXISTS idx_questions_user_next_review ON questions(user_id, next_review)")
+
 	db.Model(&models.Question{}).Where("category = '' OR category IS NULL").Update("category", "未分类")
 	var questions []models.Question
 	db.Where("source LIKE ? AND category = ?", "questions/%", "未分类").Find(&questions)
@@ -136,6 +139,9 @@ func Run() {
 	}
 
 	sr = spacedrepetition.NewSpacedRepetition(db)
+
+	// 自动创建 demo 体验账户
+	seedDemoUser(db, sr)
 
 	r := SetupRouter()
 
@@ -281,11 +287,15 @@ func getDueQuestionsHandler(c *gin.Context) {
 	userID := userId.(uint)
 
 	category := c.Query("category")
+	if category == "" {
+		category = c.Query("categories")
+	}
 
 	var dueQuestions []*models.Question
 	var err error
 	if category != "" {
-		dueQuestions, err = sr.GetDueQuestionsByCategory(userID, category)
+		categories := splitCategories(category)
+		dueQuestions, err = sr.GetDueQuestionsByCategories(userID, categories)
 	} else {
 		dueQuestions, err = sr.GetDueQuestions(userID)
 	}
@@ -415,6 +425,18 @@ var categoryLabelMap = map[string]string{
 	"08_tools":     "工具",
 	"09_ai":        "AI",
 	"10_billing":   "计费",
+}
+
+func splitCategories(raw string) []string {
+	parts := strings.Split(raw, ",")
+	var result []string
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p != "" {
+			result = append(result, p)
+		}
+	}
+	return result
 }
 
 func categoryLabel(name string) string {
@@ -707,4 +729,75 @@ func addQuestionHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, Response{Success: true, Message: "问题添加成功", Data: map[string]interface{}{"stats": stats}})
+}
+
+// seedDemoUser creates a demo account with sample questions so first-time
+// visitors can explore KnowLoop instantly without registering.
+func seedDemoUser(database *gorm.DB, srInstance *spacedrepetition.SpacedRepetition) {
+	// Check if demo user already exists
+	var demoUser models.User
+	result := database.Where("username = ?", "demo").First(&demoUser)
+
+	if result.Error != nil {
+		// Create demo user
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("demo123"), bcrypt.DefaultCost)
+		if err != nil {
+			return
+		}
+		demoUser = models.User{
+			Username: "demo",
+			Password: string(hashedPassword),
+		}
+		if err := database.Create(&demoUser).Error; err != nil {
+			return
+		}
+	}
+
+	// Check if demo questions are already seeded
+	var count int64
+	database.Model(&models.Question{}).Where("user_id = ?", demoUser.ID).Count(&count)
+	if count > 0 {
+		return
+	}
+
+	// Sample questions about learning methods to showcase the system
+	demoQuestions := []struct{ question, answer string }{
+		{
+			"什么是艾宾浩斯遗忘曲线？",
+			"由德国心理学家赫尔曼·艾宾浩斯于1885年提出，描述了人类记忆随时间的遗忘规律：学习后20分钟遗忘约42%，1小时后遗忘约56%，1天后遗忘约74%，一周后遗忘约77%。遗忘速度呈现「先快后慢」的特点，这为间隔重复学习法提供了科学依据。",
+		},
+		{
+			"什么是间隔重复（Spaced Repetition）？",
+			"一种科学的学习技巧，通过在即将遗忘的关键时间点进行复习，最大化记忆保留效果。相比传统的死记硬背，间隔重复的效率可提升2-5倍。Anki、SuperMemo以及本系统KnowLoop都基于这一原理。",
+		},
+		{
+			"番茄工作法的核心是什么？",
+			"由Francesco Cirillo在1980年代创立：25分钟专注工作 + 5分钟短暂休息 = 1个番茄钟。每完成4个番茄钟后休息15-30分钟。核心理念是通过短时间的高强度专注来克服拖延、提升效率。",
+		},
+		{
+			"费曼学习法是什么？",
+			"诺贝尔物理学奖得主理查德·费曼提出：用教别人的方式来检验自己是否真正理解。具体步骤：①选择一个概念、②尝试用最简单的语言解释它、③发现解释不通的地方回去学习、④简化并类比。如果你不能简单解释清楚，说明你还没真正学会。",
+		},
+		{
+			"什么是主动回忆（Active Recall）？",
+			"不看书本和笔记，主动从大脑中提取信息的学习方法。研究表明，主动回忆比被动重读的效率高50%以上。具体做法：读完一页书后合上书本，尝试回忆主要内容、关键概念和逻辑关系。这正是KnowLoop的核心学习方式。",
+		},
+		{
+			"SQ3R阅读法包含哪五个步骤？",
+			"Survey（浏览）：快速浏览标题、摘要、图表，建立整体印象；Question（提问）：将标题转化为问题；Read（阅读）：带着问题精读内容；Recite（复述）：用自己的话总结要点；Review（复习）：间隔时间后回顾巩固。这是一种系统性的主动阅读方法。",
+		},
+		{
+			"刻意练习（Deliberate Practice）的核心要素是什么？",
+			"由心理学家Anders Ericsson提出：①明确具体的目标、②高度的专注和投入、③获得即时反馈、④持续走出舒适区、⑤建立高质量的心理表征。刻意练习不是简单的10000小时重复，而是有目的、有反馈的针对性训练。",
+		},
+		{
+			"Dunning-Kruger效应（达克效应）是什么？",
+			"1999年由David Dunning和Justin Kruger提出：能力较低的人往往高估自己的能力水平，而真正有能力的人反而容易低估自己。原因在于：缺乏能力的人也缺乏识别自己不足所需的元认知能力。真正的智慧始于「知道自己不知道」。",
+		},
+	}
+
+	for _, q := range demoQuestions {
+		qID := fmt.Sprintf("q_%d_%s", demoUser.ID, spacedrepetition.Hash(q.question))
+		_ = srInstance.AddQuestion(demoUser.ID, qID, q.question, q.answer, "demo", "学习方法")
+	}
 }
