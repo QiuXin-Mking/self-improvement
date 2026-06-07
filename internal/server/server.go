@@ -481,8 +481,11 @@ func importQuestions(userID uint, questions []*parser.Question) (imported, skipp
 func initDatabaseHandler(c *gin.Context) {
 	userId, _ := c.Get("user_id")
 	userID := userId.(uint)
+	username, _ := c.Get("username")
 
-	p, err := parser.NewQuestionParser()
+	// 每个用户有自己独立的题目目录，避免扫描到其他用户的内容
+	userDir := filepath.Join("questions", username.(string))
+	p, err := parser.NewQuestionParser(userDir)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Response{Success: false, Error: err.Error()})
 		return
@@ -495,7 +498,7 @@ func initDatabaseHandler(c *gin.Context) {
 	}
 
 	if len(questions) == 0 {
-		c.JSON(http.StatusBadRequest, Response{Success: false, Error: "没有找到任何问题！请确保配置的目录下有 .md 文件。"})
+		c.JSON(http.StatusBadRequest, Response{Success: false, Error: "没有找到任何问题！请先将 .md 文件放入 questions/" + username.(string) + "/ 目录，或使用上传功能添加题目。"})
 		return
 	}
 
