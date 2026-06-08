@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { learningApi } from '@/api/learning'
-import type { Question, Stats, Category } from '@/api/types'
+import type { Question, Stats, Category, ForecastDay } from '@/api/types'
 
 export const useLearningStore = defineStore('learning', () => {
   // 状态
@@ -14,6 +14,7 @@ export const useLearningStore = defineStore('learning', () => {
   })
 
   const categories = ref<Category[]>([])
+  const forecast = ref<ForecastDay[]>([])
   const questions = ref<Question[]>([])
   const currentQuestionIndex = ref(0)
   const isAnswerVisible = ref(false)
@@ -176,6 +177,32 @@ export const useLearningStore = defineStore('learning', () => {
     }
   }
 
+  async function resetDemo() {
+    try {
+      const response = await learningApi.resetDemo()
+      if (response.success && response.data) {
+        stats.value = response.data.stats
+      }
+    } catch (error) {
+      console.error('重置体验数据失败:', error)
+      // 不抛出错误，让体验流程继续
+    }
+  }
+
+  async function fetchForecast(days: number = 7) {
+    try {
+      const response = await learningApi.getForecast(days)
+      if (response.success && response.data) {
+        forecast.value = response.data.forecast || []
+        return forecast.value
+      }
+      return []
+    } catch (error) {
+      console.error('获取复习预告失败:', error)
+      return []
+    }
+  }
+
   async function addQuestion(question: string, answer: string) {
     try {
       const response = await learningApi.addQuestion(question, answer)
@@ -209,6 +236,7 @@ export const useLearningStore = defineStore('learning', () => {
     // State
     stats,
     categories,
+    forecast,
     questions,
     currentQuestionIndex,
     isAnswerVisible,
@@ -228,6 +256,8 @@ export const useLearningStore = defineStore('learning', () => {
     initDatabase,
     uploadZip,
     uploadMd,
+    resetDemo,
+    fetchForecast,
     addQuestion,
     showAnswer,
     nextQuestion,

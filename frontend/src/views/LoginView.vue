@@ -51,10 +51,12 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useLearningStore } from '@/stores/learning'
 import { showFailToast } from 'vant'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const learningStore = useLearningStore()
 
 const username = ref('')
 const password = ref('')
@@ -97,7 +99,15 @@ const demoLogin = async () => {
     const result = await authStore.login('demo', 'demo123')
 
     if (result.success) {
-      router.push('/dashboard')
+      // 重置体验数据，确保每次一键体验都是全新状态
+      try {
+        await learningStore.resetDemo()
+      } catch (e) {
+        // 重置失败不阻塞流程，继续进入体验
+        console.error('重置体验数据失败:', e)
+      }
+      // 导航到分类选择页，让体验流程使用分类功能
+      router.push('/categories')
     } else {
       showFailToast({
         message: result.message || '体验登录失败',

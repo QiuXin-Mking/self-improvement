@@ -52,6 +52,7 @@ func (sr *SpacedRepetition) GetDueQuestions(userID uint) ([]*models.Question, er
 
 	err := sr.DB.Where("user_id = ? AND next_review <= ?", userID, now).
 		Order("next_review ASC").
+		Limit(100).
 		Find(&questions).Error
 
 	if err != nil {
@@ -68,6 +69,23 @@ func (sr *SpacedRepetition) GetDueQuestionsByCategory(userID uint, category stri
 
 	err := sr.DB.Where("user_id = ? AND next_review <= ? AND category = ?", userID, now, category).
 		Order("next_review ASC").
+		Find(&questions).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return questions, nil
+}
+
+// GetDueQuestionsByCategories returns due questions filtered by multiple categories
+func (sr *SpacedRepetition) GetDueQuestionsByCategories(userID uint, categories []string) ([]*models.Question, error) {
+	now := time.Now()
+	var questions []*models.Question
+
+	err := sr.DB.Where("user_id = ? AND next_review <= ? AND category IN ?", userID, now, categories).
+		Order("next_review ASC").
+		Limit(100).
 		Find(&questions).Error
 
 	if err != nil {
@@ -188,6 +206,53 @@ func (sr *SpacedRepetition) UpdateReview(userID uint, id string, feedback int) e
 	}
 
 	return sr.DB.Save(question).Error
+}
+
+// ResetUserQuestions resets all questions for a user to fresh state.
+// All questions become due immediately with review counts zeroed.
+func (sr *SpacedRepetition) ResetUserQuestions(userID uint) error {
+	now := time.Now()
+	return sr.DB.Model(&models.Question{}).
+		Where("user_id = ?", userID).
+		Updates(map[string]interface{}{
+			"level":         4,
+			"next_review":   now,
+			"review_count":  0,
+			"correct_count": 0,
+			"last_reviewed": nil,
+		}).Error
+}
+
+// GetForecast returns review counts for the next N days
+func (sr *SpacedRepetition) GetForecast(userID uint, days int) ([]map[string]interface{}, error) {
+	now := time.Now()
+	var forecast []map[string]interface{}
+
+	for i := 0; i < days; i++ {
+		dayStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).AddDate(0, 0, i)
+		dayEnd := dayStart.AddDate(0, 0, 1).Add(-time.Second)
+
+		var count int64
+		sr.DB.Model(&models.Question{}).
+			Where("user_id = ? AND next_review BETWEEN ? AND ?", userID, dayStart, dayEnd).
+			Count(&count)
+
+		forecast = append(forecast, map[string]interface{}{
+			"date":  dayStart.Format("2006-01-02"),
+			"count": count,
+		})
+	}
+
+	// Also include overdue items (next_review <= now) in today's count
+	if len(forecast) > 0 {
+		var overdue int64
+		sr.DB.Model(&models.Question{}).
+			Where("user_id = ? AND next_review <= ?", userID, now).
+			Count(&overdue)
+		forecast[0]["count"] = overdue
+	}
+
+	return forecast, nil
 }
 
 // DeleteQuestion removes a question from the user's knowledge base

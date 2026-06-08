@@ -6,6 +6,7 @@ import type {
   InitData,
   ImportResult,
   FeedbackLevel,
+  ForecastDay,
   ApiResponse
 } from './types'
 
@@ -62,6 +63,16 @@ export const learningApi = {
     return api.post('/upload-md', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
+  },
+
+  // 重置体验数据（重置所有复习状态）
+  resetDemo(): Promise<ApiResponse<{ stats: Stats }>> {
+    return api.post('/reset-demo')
+  },
+
+  // 获取未来复习预告
+  getForecast(days: number = 7): Promise<ApiResponse<{ forecast: ForecastDay[] }>> {
+    return api.get('/forecast', { params: { days } })
   },
 
   // 手动添加问题

@@ -58,6 +58,15 @@ export interface ImportResult {
   stats: Stats
 }
 
+export interface ForecastDay {
+  date: string
+  count: number
+}
+
+export interface ForecastData {
+  forecast: ForecastDay[]
+}
+
 export type FeedbackLevel = 1 | 2 | 3 | 4
 
 // Auth types

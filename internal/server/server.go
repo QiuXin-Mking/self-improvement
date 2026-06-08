@@ -89,6 +89,8 @@ func SetupRouter() *gin.Engine {
 		protected.POST("/upload-zip", uploadZipHandler)
 		protected.POST("/upload-md", uploadMdHandler)
 		protected.POST("/add-question", addQuestionHandler)
+		protected.POST("/reset-demo", resetDemoHandler)
+		protected.GET("/forecast", getForecastHandler)
 	}
 
 	staticDir := os.Getenv("STATIC_DIR")
@@ -732,6 +734,43 @@ func addQuestionHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, Response{Success: true, Message: "问题添加成功", Data: map[string]interface{}{"stats": stats}})
+}
+
+func resetDemoHandler(c *gin.Context) {
+	userId, _ := c.Get("user_id")
+	userID := userId.(uint)
+
+	if err := sr.ResetUserQuestions(userID); err != nil {
+		c.JSON(http.StatusInternalServerError, Response{Success: false, Error: "重置体验数据失败"})
+		return
+	}
+
+	stats, err := sr.GetStats(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{Success: false, Error: "获取统计失败"})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{Success: true, Message: "体验数据已重置", Data: map[string]interface{}{"stats": stats}})
+}
+
+func getForecastHandler(c *gin.Context) {
+	userId, _ := c.Get("user_id")
+	userID := userId.(uint)
+
+	daysStr := c.DefaultQuery("days", "7")
+	days, err := strconv.Atoi(daysStr)
+	if err != nil || days < 1 || days > 30 {
+		days = 7
+	}
+
+	forecast, err := sr.GetForecast(userID, days)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{Success: false, Error: "获取复习预告失败"})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{Success: true, Data: map[string]interface{}{"forecast": forecast}})
 }
 
 // seedDemoUser creates a demo account with sample questions so first-time
