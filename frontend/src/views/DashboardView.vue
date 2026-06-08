@@ -8,6 +8,21 @@
       <button class="btn-logout" @click="logout">退出</button>
     </div>
 
+    <!-- 复习完成总结横幅 -->
+    <div v-if="sessionSummary" class="session-summary">
+      <div class="session-badge">🎉 复习完成！</div>
+      <div class="session-stats">
+        <span>本次正确率 {{ sessionSummary.accuracy }}%</span>
+        <span class="session-divider">|</span>
+        <span>完成 {{ sessionSummary.completed }} 题</span>
+      </div>
+      <div v-if="nextDueDays > 0" class="session-next">
+        📅 下次复习：{{ nextDueDays === 1 ? '明天' : nextDueDays + '天后' }}预计有 {{ forecastDueSoon }} 题待复习
+      </div>
+      <button class="session-dismiss" @click="sessionSummary = null">✕</button>
+    </div>
+
+    <!-- 统计卡片 -->
     <div class="dashboard-stats">
       <div class="stat-card stat-card-total">
         <div class="stat-icon">📚</div>
@@ -24,8 +39,57 @@
         <div class="stat-value">{{ stats.accuracy }}%</div>
         <div class="stat-label">正确率</div>
       </div>
+      <div class="stat-card stat-card-reviews">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-value">{{ stats.total_reviews }}</div>
+        <div class="stat-label">总复习次数</div>
+      </div>
     </div>
 
+    <!-- 近期复习预告 -->
+    <div v-if="forecast.length > 0" class="forecast-section">
+      <h2 class="section-title">📅 近期复习预告</h2>
+      <div class="forecast-list">
+        <div
+          v-for="(day, index) in forecast"
+          :key="day.date"
+          class="forecast-item"
+          :class="{ 'forecast-today': index === 0, 'forecast-empty': day.count === 0 }"
+        >
+          <div class="forecast-label">
+            {{ index === 0 ? '今天' : index === 1 ? '明天' : day.date.slice(5) }}
+          </div>
+          <div class="forecast-bar-wrap">
+            <div
+              class="forecast-bar"
+              :style="{ width: forecastBarWidth(day.count) + '%' }"
+            ></div>
+          </div>
+          <div class="forecast-count">{{ day.count }}题</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分类进度 -->
+    <div v-if="categories.length > 0" class="category-progress-section">
+      <h2 class="section-title">📊 分类进度</h2>
+      <div class="category-progress-list">
+        <div v-for="cat in categories" :key="cat.name" class="category-progress-item">
+          <div class="category-progress-header">
+            <span class="category-progress-label">{{ cat.label || cat.name }}</span>
+            <span class="category-progress-meta">{{ cat.total - cat.due }}/{{ cat.total }} 已掌握</span>
+          </div>
+          <div class="category-progress-bar-wrap">
+            <div
+              class="category-progress-bar"
+              :style="{ width: categoryProgress(cat) + '%' }"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 操作按钮 -->
     <div class="dashboard-actions">
       <van-button
         type="primary"
@@ -97,19 +161,65 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useLearningStore } from '@/stores/learning'
 import { storeToRefs } from 'pinia'
 import { showToast } from 'vant'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 const learningStore = useLearningStore()
 
 const { user } = storeToRefs(authStore)
-const { stats } = storeToRefs(learningStore)
+const { stats, forecast, categories } = storeToRefs(learningStore)
+
+interface SessionSummary {
+  accuracy: string
+  completed: number
+}
+
+const sessionSummary = ref<SessionSummary | null>(null)
+
+// 从路由参数读取复习完成总结
+if (route.query.accuracy && route.query.completed) {
+  sessionSummary.value = {
+    accuracy: route.query.accuracy as string,
+    completed: Number(route.query.completed)
+  }
+  // 清除 query 参数，防止刷新重复显示
+  router.replace({ path: '/dashboard', query: {} })
+}
+
+// 计算下次复习还有几天
+const nextDueDays = computed(() => {
+  if (forecast.value.length <= 1) return 0
+  for (let i = 1; i < forecast.value.length; i++) {
+    if ((forecast.value[i]?.count ?? 0) > 0) return i
+  }
+  return 0
+})
+
+const forecastDueSoon = computed(() => {
+  if (nextDueDays.value === 0 || nextDueDays.value >= forecast.value.length) return 0
+  return forecast.value[nextDueDays.value]?.count ?? 0
+})
+
+const maxForecastCount = computed(() => {
+  if (forecast.value.length === 0) return 1
+  return Math.max(...forecast.value.map(d => d.count), 1)
+})
+
+function forecastBarWidth(count: number): number {
+  return Math.round((count / maxForecastCount.value) * 100)
+}
+
+function categoryProgress(cat: { total: number; due: number }): number {
+  if (cat.total === 0) return 0
+  return Math.round(((cat.total - cat.due) / cat.total) * 100)
+}
 
 const logout = () => {
   authStore.logout()
@@ -211,12 +321,14 @@ const onManualConfirm = async () => {
 }
 
 onMounted(async () => {
-  console.log('DashboardView onMounted')
   try {
-    await learningStore.fetchStats()
-    console.log('Stats loaded:', stats.value)
+    await Promise.all([
+      learningStore.fetchStats(),
+      learningStore.fetchForecast(),
+      learningStore.fetchCategories()
+    ])
   } catch (error) {
-    console.error('Failed to load stats:', error)
+    console.error('Failed to load dashboard data:', error)
   }
 })
 </script>
@@ -226,15 +338,19 @@ onMounted(async () => {
 
 .dashboard-container {
   padding: $spacing-lg;
+  padding-top: calc($spacing-lg + var(--safe-area-top));
+  padding-bottom: calc($spacing-lg + var(--safe-area-bottom));
   min-height: 100vh;
   background: $bg-paper;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-lg;
 
   .greeting {
     .dashboard-title {
@@ -265,26 +381,73 @@ onMounted(async () => {
   }
 }
 
+// 复习完成总结横幅
+.session-summary {
+  position: relative;
+  background: linear-gradient(135deg, rgba($color-primary, 0.08), rgba($amber, 0.12));
+  border: 1px solid rgba($amber, 0.3);
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  text-align: center;
+
+  .session-badge {
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $ink-deep;
+    margin-bottom: $spacing-xs;
+  }
+
+  .session-stats {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-xs;
+
+    .session-divider {
+      margin: 0 $spacing-sm;
+      color: $text-muted;
+    }
+  }
+
+  .session-next {
+    font-size: $font-size-sm;
+    color: $amber;
+    font-weight: 500;
+  }
+
+  .session-dismiss {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: $text-muted;
+    cursor: pointer;
+    padding: 4px;
+  }
+}
+
 .dashboard-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: $spacing-sm;
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-lg;
 }
 
 .stat-card {
   border-radius: $border-radius-lg;
-  padding: $spacing-lg $spacing-sm;
+  padding: $spacing-md $spacing-sm;
   text-align: center;
   box-shadow: $shadow-sm;
 
   .stat-icon {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: $spacing-xs;
   }
 
   .stat-value {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     margin-bottom: 2px;
   }
@@ -298,21 +461,155 @@ onMounted(async () => {
     background: $bg-cream;
     border: 1px solid $card-border;
     .stat-value { color: $ink-deep; }
-    .stat-label { color: $text-secondary; }
   }
 
   &.stat-card-due {
     background: rgba($amber, 0.12);
     border: 1px solid rgba($amber, 0.3);
     .stat-value { color: $amber; }
-    .stat-label { color: $amber; opacity: 0.8; }
   }
 
   &.stat-card-accuracy {
     background: rgba($success, 0.1);
     border: 1px solid rgba($success, 0.25);
     .stat-value { color: $success; }
-    .stat-label { color: $success; opacity: 0.8; }
+  }
+
+  &.stat-card-reviews {
+    background: rgba($ink-blue, 0.08);
+    border: 1px solid rgba($ink-blue, 0.2);
+    .stat-value { color: $ink-blue; }
+  }
+}
+
+// 近期复习预告
+.forecast-section {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  .section-title {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: $ink-deep;
+    margin: 0 0 $spacing-md;
+  }
+
+  .forecast-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  .forecast-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: 6px 0;
+
+    .forecast-label {
+      width: 48px;
+      font-size: $font-size-xs;
+      color: $text-secondary;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .forecast-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: $bg-cream;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .forecast-bar {
+      height: 100%;
+      background: $color-primary;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      min-width: 4px;
+    }
+
+    .forecast-count {
+      width: 36px;
+      font-size: $font-size-xs;
+      color: $text-secondary;
+      text-align: left;
+      flex-shrink: 0;
+    }
+
+    &.forecast-today {
+      .forecast-label { color: $amber; font-weight: 600; }
+      .forecast-bar { background: $amber; }
+      .forecast-count { color: $amber; font-weight: 600; }
+    }
+
+    &.forecast-empty {
+      .forecast-bar { opacity: 0.3; }
+      .forecast-count { color: $text-muted; }
+    }
+  }
+}
+
+// 分类进度
+.category-progress-section {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  .section-title {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: $ink-deep;
+    margin: 0 0 $spacing-md;
+  }
+
+  .category-progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .category-progress-item {
+    .category-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+
+      .category-progress-label {
+        font-size: $font-size-sm;
+        font-weight: 500;
+        color: $ink-mid;
+      }
+
+      .category-progress-meta {
+        font-size: $font-size-xs;
+        color: $text-muted;
+      }
+    }
+
+    .category-progress-bar-wrap {
+      height: 6px;
+      background: $bg-cream;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .category-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, $color-primary, $success);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+      min-width: 4px;
+    }
   }
 }
 
@@ -335,6 +632,17 @@ onMounted(async () => {
   }
 }
 
+// 超窄屏 stat cards 单列
+@media (max-width: 340px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-container {
+    padding: $spacing-md;
+    padding-top: calc($spacing-md + var(--safe-area-top));
+    padding-bottom: calc($spacing-md + var(--safe-area-bottom));
+  }
+}
 </style>
 
 <style lang="scss">

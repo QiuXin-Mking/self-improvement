@@ -1,6 +1,13 @@
 @use './variables.scss' as *;
 @use 'sass:color';
 
+:root {
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -17,12 +24,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: $bg-paper;
   color: $text-primary;
+  overflow-x: hidden;
 }
 
 #app {
   width: 100%;
   min-height: 100vh;
   background: $bg-paper;
+}
+
+// 全局防溢出
+img, pre, code, table {
+  max-width: 100%;
+  height: auto;
+}
+
+// 文本容器防溢出
+.question-content,
+.answer-content,
+.card p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 // Scrollbar
@@ -131,4 +153,10 @@ input:-webkit-autofill:active {
 @media (max-width: 480px) {
   .card { padding: $spacing-md; }
   .btn { padding: 10px 18px; font-size: 14px; }
+}
+
+// 超小屏适配 (iPhone SE 等 ≤374px)
+@media (max-width: 374px) {
+  .card { padding: $spacing-sm; }
+  .btn { padding: 8px 14px; font-size: 13px; }
 }

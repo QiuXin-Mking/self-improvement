@@ -14,6 +14,5 @@
 .app-container {
   min-height: 100vh;
   background: $bg-paper;
-  padding: $spacing-sm;
 }
 </style>
