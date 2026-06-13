@@ -79,3 +79,52 @@ make deps                                     # go mod tidy && cd frontend && np
 - JWT_SECRET env var is required; defaults to `my-secret-key` in dev scripts
 - Frontend dev on :3000, backend on :8000 (start.sh) or :5000 (standalone `go run`)
 - Database auto-created at `data/app.db` on first run
+
+## Documentation Rules
+
+When fixing a bug or implementing a feature, you MUST record it:
+
+### Bug fixes → `docs/bugs/`
+1. Create `docs/bugs/NNN-short-slug.md` (NNN = next available number, padded to 3 digits)
+2. Update `docs/bugs/README.md` — add row to the table
+3. Bug doc template:
+```markdown
+# Title
+
+## Status
+✅ 已修复 (YYYY-MM-DD)
+
+## 现象
+...
+
+## 原因
+...
+
+## 修复
+...
+
+## 涉及文件
+- `path/to/file`
+```
+
+### Features → `docs/features/`
+1. Create `docs/features/NNN-short-slug.md` (NNN = next available number)
+2. Feature doc template:
+```markdown
+# Feature Name
+
+## 概述
+...
+
+## 支持的语法 / 功能
+| 项 | 说明 |
+|----|------|
+
+## 涉及的代码
+| 文件 | 用途 |
+|------|------|
+```
+
+### Slash Commands
+- `/record-bug` — create a bug doc after fixing a bug
+- `/record-feature` — create a feature doc after implementing a feature
