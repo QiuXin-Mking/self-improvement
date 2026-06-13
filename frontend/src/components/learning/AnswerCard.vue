@@ -2,19 +2,23 @@
   <div v-if="visible" class="answer-card card">
     <div class="answer-section">
       <div class="answer-label">答案</div>
-      <div class="answer-content">{{ answer }}</div>
+      <div class="answer-content markdown-body" v-html="rendered"></div>
     </div>
     <slot></slot>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { renderMarkdown } from '@/composables/useMarkdown'
+
 interface Props {
   answer: string
   visible: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+const rendered = computed(() => renderMarkdown(props.answer))
 </script>
 
 <style lang="scss" scoped>
@@ -39,7 +43,5 @@ defineProps<Props>()
   font-size: 16px;
   line-height: 1.6;
   color: $text-primary;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 </style>

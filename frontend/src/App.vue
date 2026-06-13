@@ -10,6 +10,7 @@
 
 <style lang="scss">
 @use '@/styles/global.scss' as *;
+@use '@/styles/markdown.scss' as *;
 
 .app-container {
   min-height: 100vh;

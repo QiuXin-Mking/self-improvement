@@ -1,0 +1,110 @@
+@use './variables.scss' as *;
+
+// Markdown 渲染后的内容样式
+.markdown-body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: $text-primary;
+
+  // 段落
+  p {
+    margin-bottom: 0.8em;
+    &:last-child { margin-bottom: 0; }
+  }
+
+  // 行内代码
+  code {
+    background: rgba($ink-deep, 0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'SF Mono', 'Cascadia Code', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  }
+
+  // 围栏代码块
+  pre {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: $spacing-md;
+    border-radius: $border-radius-sm;
+    overflow-x: auto;
+    margin: $spacing-sm 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    code {
+      background: none;
+      padding: 0;
+      font-size: 14px;
+      color: inherit;
+    }
+  }
+
+  // 表格
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: $spacing-sm 0;
+    font-size: 14px;
+  }
+
+  th, td {
+    border: 1px solid $card-border;
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  th {
+    background: rgba($ink-deep, 0.04);
+    font-weight: 600;
+  }
+
+  tr:nth-child(even) td {
+    background: rgba($ink-deep, 0.02);
+  }
+
+  // 列表
+  ul, ol {
+    padding-left: 1.5em;
+    margin-bottom: 0.8em;
+  }
+
+  li {
+    margin-bottom: 0.3em;
+  }
+
+  // 水平线
+  hr {
+    border: none;
+    border-top: 1px solid $card-border;
+    margin: $spacing-md 0;
+  }
+
+  // 引用块
+  blockquote {
+    border-left: 3px solid $amber;
+    padding-left: $spacing-sm;
+    color: $text-secondary;
+    margin: $spacing-sm 0;
+  }
+
+  // 粗体 / 斜体
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  // 标题
+  h1, h2, h3, h4, h5, h6 {
+    margin: 1em 0 0.5em;
+    color: $ink-deep;
+    font-weight: 600;
+  }
+  h1 { font-size: 1.4em; }
+  h2 { font-size: 1.25em; }
+  h3 { font-size: 1.1em; }
+
+  // 链接
+  a {
+    color: $ink-blue;
+    text-decoration: underline;
+  }
+}

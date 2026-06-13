@@ -2,7 +2,7 @@
   <div class="question-card card">
     <div class="question-section">
       <div class="question-label">问题</div>
-      <div class="question-content">{{ question }}</div>
+      <div class="question-content markdown-body" v-html="rendered"></div>
     </div>
 
     <div class="action-buttons">
@@ -17,11 +17,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { renderMarkdown } from '@/composables/useMarkdown'
+
 interface Props {
   question: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+const rendered = computed(() => renderMarkdown(props.question))
+
 defineEmits<{
   (e: 'show-answer'): void
   (e: 'delete'): void
@@ -53,8 +58,6 @@ defineEmits<{
   font-size: 17px;
   line-height: 1.7;
   color: $text-primary;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
 .action-buttons {
