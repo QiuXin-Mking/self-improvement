@@ -39,11 +39,14 @@ img, pre, code, table {
   height: auto;
 }
 
-// 文本容器防溢出
-.question-content,
-.answer-content,
+// 等宽字体 — ASCII 图表、代码块对齐
+pre, code, .question-content, .answer-content {
+  font-family: 'SF Mono', 'Cascadia Code', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+}
+
+// 文本容器防溢出（仅对段落，不碰代码区）
 .card p {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   word-break: break-word;
 }
 
