@@ -1,5 +1,8 @@
 <template>
   <div class="category-select-container">
+    <div class="category-top-bar">
+      <button class="btn-back" @click="goBack">← 首页</button>
+    </div>
     <div class="category-header">
       <h1 class="category-title">选择复习分类</h1>
       <p class="category-subtitle">选择一个或多个分类开始复习</p>
@@ -50,9 +53,6 @@
       </van-button>
     </div>
 
-    <div class="back-link">
-      <van-button type="default" size="small" @click="goBack">返回首页</van-button>
-    </div>
   </div>
 </template>
 
@@ -210,7 +210,26 @@ onMounted(async () => {
   }
 }
 
-.back-link {
-  text-align: center;
+.category-top-bar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: $spacing-lg;
+}
+
+.btn-back {
+  background: none;
+  border: 1px solid $card-border;
+  color: $text-secondary;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all $transition-fast;
+
+  &:hover {
+    color: $ink-mid;
+    border-color: $ink-mid;
+  }
 }
 </style>
